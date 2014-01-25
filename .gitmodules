@@ -1,0 +1,3 @@
+[submodule "libfoo"]
+        path = _theme_packages
+        url = https://github.com/jekyllbootstrap/theme-twitter.git
