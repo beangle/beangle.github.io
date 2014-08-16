@@ -16,6 +16,7 @@ tags: [spring]
 ### 如何进行绑定
 就权限系统中常见的用户、角色、权限等服务，配置简单例子如下：
 
+
     package org.beangle.sample
     import org.beangle.commons.inject.bind.AbstractBindModule
     class DefaultModule extends AbstractBindModule {
@@ -29,6 +30,7 @@ tags: [spring]
         bind(classOf[UserAction]).in(Scope.PROTOTYPE)
       }
     }
+
 
 然后，将beangle自带的SpringConfigProcessor处理器以及刚才定义的DefaultModule，注入到spring bean中，即实现bean配置。
 
