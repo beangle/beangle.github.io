@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "WebMVC"
+title: "WebMVC Index"
 ---
 {% include JB/setup %}
 

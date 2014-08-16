@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Commons"
+title: "Commons Index"
 ---
 {% include JB/setup %}
 

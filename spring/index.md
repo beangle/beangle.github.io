@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Spring"
+title: "Spring Index"
 ---
 {% include JB/setup %}
 
