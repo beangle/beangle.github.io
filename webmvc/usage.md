@@ -254,20 +254,20 @@ profile中view定义的style分别有full/simple/seo三种，以com.example.mess
  以使用URL的/context/work/message/search为例:
 
     //调转到/context/work/message/search/info
-    forward(Action(this,"info"))
+    forward(to(this,"info"))
     
     //调转到/context/family/message/search/info
-    foreard(Action(this,"info","&box=family"))
+    foreard(to(this,"info","&box=family"))
 
     //调转到/context/family/message/search/info?orderBy=date
-    foreard(Action(this,"info","&box=family&orderBy=date"))
+    foreard(to(this,"info","&box=family&orderBy=date"))
 
 **Forward到其他Action**
 
    方法类似于调转到本类，如下
 
     //调转到/context/work/message/complex-search/info
-    forward(Action(classOf[ComplexSearch],"info"))
+    forward(to(classOf[ComplexSearch],"info"))
 
 **Redirect本类的其他方法**
 
@@ -277,4 +277,4 @@ profile中view定义的style分别有full/simple/seo三种，以com.example.mess
 **Redirect到其他类**
 
     仍旧以SearchAction.info方法为例子
-    redirect(Action(classOf[ComplexSearch],"search","&box="+get("box")),"error.bad_message_id")
+    redirect(to(classOf[ComplexSearch],"search","&box="+get("box")),"error.bad_message_id")
