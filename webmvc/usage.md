@@ -17,7 +17,7 @@ tags: [webmvc]
             `-- META-INF
                `-- beangle
                   |-- web-module.properties
-                  `-- convention-route.xml
+                  `-- mvc-config.xml
  
 action的代码如下:
 
@@ -64,7 +64,7 @@ import com.example.message.service.impl.MessageServiceImpl
     modules=com.example.message.MessageModule
 
 第三步，定义路由规则
-定义META-INF/beangle/convention-route.xml。这个文件的定义是一次性的，不因action的数量而变得复杂。
+定义META-INF/beangle/mvc-config.xml。这个文件的定义是一次性的，不因action的数量而变得复杂。
 
     <?xml version="1.0"?>
     <profiles>
@@ -72,20 +72,20 @@ import com.example.message.service.impl.MessageServiceImpl
         <!--这里是默认的规则，如有需要可以打开修改。
         <action suffix="Action" defaultMethod="index"/>
         <view path="/" style="full" suffix=".ftl" />
-        <uri path="/" suffix=""  style="seo" />
+        <url path="/" suffix=""  style="seo" />
         -->
       </profile>
     </profiles>
 
 第四步 运行
 
-可以选择依赖beangle-webmvc-struts或者beangle-webmvc-springmvc环境，运行该例子。
+可以选择依赖beangle-webmvc-webxml配置web.xml，运行该例子。
 http://localhost:8080/context/message/search
 
 
-#### 二、convention-route.xml详解
+#### 二、mvc-config.xml详解
 
-每个jar中的convention-route.xml文件是定义了一个到多个配置。每个配置针对一定的package模式。例如上例中的`pattern="com.example.*.actions"`，该模式指明了配置适应的代码范围。配置分为action、view和uri三个部分。
+每个jar中的mvc-config.xml文件是定义了一个到多个配置。每个配置针对一定的package模式。例如上例中的`pattern="com.example.*.actions"`，该模式指明了配置适应的代码范围。配置分为action、view和url三个部分。
 
 action 部分配合规定符合条件的控制器
 
@@ -105,13 +105,13 @@ view部分规定了页面的路径存放风格
     # 页面的扩展名
     suffix=".ftl"
 
-uri部分规定了action到uri的路由风格
+url部分规定了action到url的路由风格
 
     # 生成的url的固定前缀,可以带有变量
     path=/
     # url路径的更个(simple为 /my/package/actionName,short 为/actionName，seo 为/my/package/action_name)
     style=seo
-    # uri 后缀,可以定义.do,.action
+    # url 后缀,可以定义.do,.action
     suffix="" 
 
 #### 三、参数绑定到Action方法
@@ -153,7 +153,7 @@ http://localhost:8080/context/message/search/info?message_id=1234
     <profiles>
       <profile name="example" pattern="com.example.*.action"/>
       <profile name="message" pattern="com.example.message.action">
-        <uri path="/message/{box}" suffix=""  style="seo" />
+        <url path="/message/{box}" suffix=""  style="seo" />
       </profile>
     </profiles>
 
@@ -168,7 +168,7 @@ http://localhost:8080/context/message/search/info?message_id=1234
       }
 {% endhighlight %}
 
-**Action范围**影响下面的所有方法生成的url。仍旧在convention-route.xml中去掉定制的profile。需要在SearchAction类增加注解，如下:
+**Action范围**影响下面的所有方法生成的url。仍旧在mvc-config.xml中去掉定制的profile。需要在SearchAction类增加注解，如下:
 
 {% highlight scala linenos %}
 package com.example.message.action
