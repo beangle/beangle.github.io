@@ -139,7 +139,7 @@ import org.beangle.webmvc.annotation.param
 http://localhost:8080/context/message/search/info?message_id=1234
 
 #### 四、URL参数化
-有时考虑到搜索引擎，将url变得静态化一些，可以将url中查询参数(queryString)放到url中。例如消息管理中，查询消息的地址为/context/message/search?box=work,可以将其变为/context/message/work/search
+有时考虑到搜索引擎，将url变得静态化一些，可以将url中部分查询参数(queryString)放到url中。例如消息管理中，查询消息的地址为/context/message/search?box=work,可以将其变为/context/message/work/search
 
 一般url参数的视其范围可以区分如下：
 
