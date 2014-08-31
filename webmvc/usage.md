@@ -16,7 +16,7 @@ tags: [webmvc]
         `-- resources(简单配置文件)
             `-- META-INF
                `-- beangle
-                  |-- web-module.properties
+                  |-- web-cdi.properties
                   `-- mvc-config.xml
  
 action的代码如下:
@@ -59,7 +59,7 @@ import com.example.message.service.impl.MessageServiceImpl
   }
 {% endhighlight %}
 
-定义META-INF/beangle/web-module.properties
+定义META-INF/beangle/web-cdi.properties
 
     modules=com.example.message.MessageModule
 
