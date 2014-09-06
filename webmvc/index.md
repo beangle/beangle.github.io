@@ -3,9 +3,9 @@ layout: page
 title: "WebMVC Index"
 ---
 {% include JB/setup %}
-Beangle WebMVC 不是取代Struts或者SpringMVC的类似框架，他仅仅定义了一些用法和惯例，并通过struts和springmvc进行实现，力求采用两者任一框架都可以运行的效果。 
+Beangle WebMVC 就是取代Struts或者SpringMVC这样类似的框架，他不仅仅定义了一些用法和惯例，还提供了简单有力的实现。 
 
-由于Struts和SpringMVC都是基于Command模式的，因此该库所提倡的用法也是基于Command的。
+类似Struts和SpringMVC，该库所提倡的用法也是基于Command的。
 
 Beangle WebMVC 所提倡的惯例和用法包括：
 
