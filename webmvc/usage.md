@@ -229,7 +229,7 @@ class MovieAction {
     GET    /movie/123/edit           edit("123")
     PUT    /movie/123                update("123")
     DELETE /movie/123                remove("123")
-    POST   /movie/123?_method=DELETE remove("123")
+    POST   /movie/123?_method=delete remove("123")
 
 #### 六、Forward&Redirect支持
 
