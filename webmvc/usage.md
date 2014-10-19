@@ -1,18 +1,23 @@
 ---
 layout: page
-title: "Webmvc Usage"
-description: "Webmvch核心功能"
+title: "WebMVC Usage"
+description: "WebMVC User Guide"
 tags: [webmvc]
 ---
 {% include JB/setup %}
 
-#### 一、快速上手Action
+#### 一、Action快速上手
 
 以一个简单的例子来说明，你需要单独写一个工程。
+   通过Maven的模版创建工程（老实说，由于maven的依赖项较多，这一步简单但不快速）
+   
+    mvn archetype:generate -B -DgroupId=com.example.message -DartifactId=message -DarchetypeGroupId=org.beangle.webmvc -DarchetypeArtifactId=beangle-webmvc-archetype-starter -DarchetypeVersion=0.1.0
+
+在生成的目录中增加以下目录结构：
 
     src
     `-- main
-        |-- scala(com.example.message.actions代码)
+        |-- scala(com.example.message.action代码)
         `-- resources(简单配置文件)
             `-- META-INF
                `-- beangle
@@ -22,21 +27,22 @@ tags: [webmvc]
 action的代码如下:
 
 {% highlight scala linenos %}
-package com.example.message.actions
+package com.example.message.action
+import org.beangle.webmvc.api.action.ActionSupport
     /**
      * 消息管理控制器
      * 这个消息服务会自动注入
      */
-    class SearchAction(var messageService:MessageService) {
+    class SearchAction(val messageService:MessageService) extends ActionSupport {
 
       def index():String ={
         //查找并验证您的参数
-        val box = Params.get("box")
+        val box = Params.get("box","default")
         //查询指定收件箱的消息
         val messages=messageService.search(box)
         //放到request.attribute中
         put("messages",messages)
-        //调转到结果页面，默认到com/example/message/actions/search/index.ftl
+        //调转到结果页面，默认到com/example/message/action/search/index.ftl
         forward()
       }
     }
@@ -49,7 +55,7 @@ MessageModule:
 {% highlight scala linenos %}
 package com.example.message
 import org.beangle.commons.inject.bind.AbstractBindModule
-import com.example.message.actions.MessageAction
+import com.example.message.action.MessageAction
 import com.example.message.service.impl.MessageServiceImpl
 
   class MessageModule extends AbstractBindModule{
@@ -68,7 +74,7 @@ import com.example.message.service.impl.MessageServiceImpl
 
     <?xml version="1.0"?>
     <profiles>
-      <profile name="example" pattern="com.example.*.actions">
+      <profile name="example" pattern="com.example.*.action">
         <!--这里是默认的规则，如有需要可以打开修改。
         <action suffix="Action" defaultMethod="index"/>
         <view path="/" style="full" suffix=".ftl" />
@@ -85,12 +91,12 @@ http://localhost:8080/context/message/search
 
 #### 二、mvc-config.xml详解
 
-每个jar中的mvc-config.xml文件是定义了一个到多个配置。每个配置针对一定的package模式。例如上例中的`pattern="com.example.*.actions"`，该模式指明了配置适应的代码范围。配置分为action、view和url三个部分。
+每个jar中的mvc-config.xml文件是定义了一个到多个配置。每个配置针对一定的package模式。例如上例中的`pattern="com.example.*.action"`，该模式指明了配置适应的代码范围。配置分为action、view和url三个部分。
 
 action 部分配合规定符合条件的控制器
 
     # 这个模式下的action
-    pattern="com.example.*.actions"
+    pattern="com.example.*.action"
     # action 类文件的后缀,例如 Controller，默认是Action
     suffix="Action"
     # action缺省方法
@@ -109,7 +115,7 @@ url部分规定了action到url的路由风格
 
     # 生成的url的固定前缀,可以带有变量
     path=/
-    # url路径的更个(simple为 /my/package/actionName,short 为/actionName，seo 为/my/package/action_name)
+    # url路径的风格(simple为/my/package/actionName,short为/actionName，seo为/my/package/action_name，plur-seo为/my/package/action_names)
     style=seo
     # url 后缀,可以定义.do,.action
     suffix="" 
@@ -118,10 +124,10 @@ url部分规定了action到url的路由风格
 如果想让您的action方法直接获取参数，而不是通过Params.get()的方式，可以进行直接声明。
 
 {% highlight scala linenos %}
-package com.example.message.actions
+package com.example.message.action
 import org.beangle.webmvc.annotation.param
-
-    class SearchAction(var messageService:MessageService) {
+import org.beangle.webmvc.api.action.ActionSupport
+    class SearchAction(var messageService:MessageService) extends ActionSupport{
       // + index method
 
       //通过param注解绑定参数
@@ -139,7 +145,7 @@ import org.beangle.webmvc.annotation.param
 http://localhost:8080/context/message/search/info?message_id=1234
 
 #### 四、URL参数化
-有时考虑到搜索引擎，将url变得静态化一些，可以将url中部分查询参数(queryString)放到url中。例如消息管理中，查询消息的地址为/context/message/search?box=work,可以将其变为/context/message/work/search
+有时考虑到搜索引擎，将url趋向静态化一些，可以将url中部分查询参数(queryString)放到url中。例如消息管理中，查询消息的地址为/context/message/search?box=work,可以将其变为/context/message/work/search
 
 一般url参数的视其范围可以区分如下：
 
@@ -272,9 +278,99 @@ profile中view定义的style分别有full/simple/seo三种，以com.example.mess
 **Redirect本类的其他方法**
 
     以SearchAction.info方法为例子
-    redirect("search","error.bad_message_id","&box="+get("box"))
+    redirect("search","&box="+get("box"),"error.bad_message_id")
 
 **Redirect到其他类**
 
     仍旧以SearchAction.info方法为例子
     redirect(to(classOf[ComplexSearch],"search","&box="+get("box")),"error.bad_message_id")
+
+#### 七、Resful Json/XML支持
+
+如果不提供界面，直接向客户端提供restful的数据，格式基于JSON或者XML，那么可以将方法直接返回查询结果。
+
+{% highlight scala linenos %}
+package com.example.message.action
+import org.beangle.webmvc.annotation.action
+
+    class SearchAction(var messageService:MessageService) {
+       @response //这里要注明，否则该方法会被框架忽略
+       def index():Seq[Message]={
+          val box =  get("box","default")
+          messageService.search(box)
+       }
+    }
+{% endhighlight %}
+
+pom.xml中需要增加
+
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-serializer-plugin</artifactId>
+      <version>0.1.0</version>
+    </dependency>
+
+这样页面上的访问地址可以改为:
+
+    http://localhost:8080/context/message/search.json返回JSON格式的数据，
+    http://localhost:8080/context/message/search.xml返回xml格式的数据。
+
+或者
+
+    http://localhost:8080/context/message/search?format=json返回JSON格式的数据，
+    http://localhost:8080/context/message/search?format=xml返回xml格式的数据。
+
+#### 八、其他支持
+
+下载文件或者图片可以采用如下方法
+
+{% highlight scala linenos %}
+package com.example.message.action
+import org.beangle.webmvc.api.view._
+
+    class LogoAction(var messageService:MessageService) {
+       def index():View={
+         //Stream(new URL("http://www.example.com/logo.gif"))
+         Stream(new File("/tmp/path/to/your/pic.gif"))
+       }
+    }
+{% endhighlight %}
+
+如果给下载文件起个单独的名称，而非文件名，则需要
+
+    Stream(new File("/tmp/path/to/your/pic.gif","我的logo"))
+    
+该文件需要浏览器缓存，可以增加过期时间设置
+
+    import org.beangle.webmvc.api.util.CacheControl
+    CacheControl.expiresAfter(4)//4天后过期
+    Stream(new File("/tmp/path/to/your/pic.gif","我的logo"))
+
+如果支持javascript跨域访问该文件，则需要在profile中添加跨域访问支持：
+
+
+    <?xml version="1.0"?>
+    <profiles>
+      <profile name="message" pattern="com.example.message.action">
+        <interceptors>
+          <interceptor name="web.Interceptor.cors"/>
+        </interceptors>
+      </profile>
+    </profiles>
+
+如果接收用户参数查找文件，文件没有找到，则需要返回404
+
+{% highlight scala linenos %}
+package com.example.message.action
+import org.beangle.webmvc.api.view._
+
+    class LogoAction {
+       def index():View={
+         val file = new File("/tmp/path/to/your/pic.gif") 
+         //或者Status(404)
+         if(file.exists) Stream(file) else Status.NotFound
+       }
+    }
+{% endhighlight %}
+
+
