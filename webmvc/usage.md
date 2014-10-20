@@ -364,13 +364,13 @@ import org.beangle.webmvc.api.view._
 package com.example.message.action
 import org.beangle.webmvc.api.view._
 
-    class LogoAction {
-       def index():View={
-         val file = new File("/tmp/path/to/your/pic.gif") 
-         //或者Status(404)
-         if(file.exists) Stream(file) else Status.NotFound
-       }
-    }
+class LogoAction {
+   def index():View={
+     val file = new File("/tmp/path/to/your/pic.gif") 
+     //或者Status(404)
+     if(file.exists) Stream(file) else Status.NotFound
+   }
+}
 {% endhighlight %}
 
 
