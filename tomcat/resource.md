@@ -11,7 +11,8 @@ Beangle Tomcat ResourceFactory是为Tomcat提供密码和配置托管提供的Fa
 
 ### 1. 加密你的数据源
 
-#### beangle-tomcat-jdbc原理
+#### 数据源密码加密解析原理
+原理参考[老外的博客](http://www.jdev.it/encrypting-passwords-in-tomcat/)。
 通常使用Apache Tomcat,数据源配置会放在$CATALINA_HOME/conf/catalina/localhost/app1.xml(或者conf/server.xml),密码会暴露出来。
 例如
 {% highlight xml linenos %}
