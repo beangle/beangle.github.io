@@ -16,7 +16,7 @@ Beangle Tomcat 是在Apache Tomcat基础上增加了一些简单的内容，简�
 {% highlight xml linenos %}
 $ wget https://raw.githubusercontent.com/beangle/tomcat/master/server/src/main/resources/netinstall.sh;\
 chmod +x ./netinstall.sh;\
-netinstall.sh 0.1.0
+./netinstall.sh 0.1.0
 {% endhighlight %}
 
 ### 2. 发布应用和启动服务
