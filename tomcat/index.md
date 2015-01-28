@@ -15,8 +15,7 @@ Beangle Tomcat 是在Apache Tomcat基础上增加了一些简单的内容，简�
 
 {% highlight xml linenos %}
 $ wget https://raw.githubusercontent.com/beangle/tomcat/master/server/src/main/resources/netinstall.sh;\
-chmod +x ./netinstall.sh;\
-./netinstall.sh 0.1.0
+chmod +x ./netinstall.sh;./netinstall.sh
 {% endhighlight %}
 
 ### 2. 发布应用和启动服务
@@ -24,8 +23,7 @@ chmod +x ./netinstall.sh;\
 Beangle Tomcat Server有特别的目录结构:
 
     |-- bin
-    |   |-- install.sh(安装tomcat）
-    |   |-- update.sh(更新tomcat)
+    |   |-- install.sh(安装或更新tomcat）
     |   |-- start.sh(启动服务)
     |   `-- stop.sh(停止服务)
     |-- conf(配置文件)
@@ -33,18 +31,24 @@ Beangle Tomcat Server有特别的目录结构:
     |-- servers(这里的内容为server运行产生，无需维护)
     `-- webapps(放置war包)
 
-新的war包放置在webapps.在conf中配置一个context。beangle tomcat server不采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是将context添加到server.xml中。可以有多个类似的server.xml，例如server1.xml,server2.xml。例如：
+新的war包放置在webapps.在conf中配置一个config.xml。beangle tomcat server不采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。例如：
 
 {% highlight xml linenos %}
 <?xml version='1.0' encoding='utf-8'?>
-<Server port="8005" shutdown="SHUTDOWN">
+<Tomcat version="8.0.17">
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="off" />
   <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
   <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
   <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+  <Context>
+    <Loader className="org.apache.catalina.loader.RepositoryLoader" cacheLayout="maven2"/>
+    <JarScanner scanBootstrapClassPath="false" scanAllDirectories="false" scanAllFiles="false" scanClassPath="false"/>
+  </Context>
   
-  <Service name="Catalina">
-    <Connector port="8080" protocol="HTTP/1.1"
+  <Farm name="default" >
+    <JvmArgs opts="-noverify -Xmx500M -Xms500M"/>
+    <HttpConnector protocol="HTTP/1.1"
            URIEncoding="UTF-8"
            enableLookups="false"
            acceptCount="100"
@@ -52,44 +56,57 @@ Beangle Tomcat Server有特别的目录结构:
            minSpareThreads="10"
            connectionTimeout="20000"
            disableUploadTimeout="true"
-           compression="off"
-           />
-    <Engine name="Catalina" defaultHost="localhost">
-      <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="false">
-        <Context path="" reloadable="false" docBase="../../../webapps/myapp">
-           <JarScanner scanBootstrapClassPath="false" scanAllDirectories="false" scanAllFiles="false" scanClassPath="false"/>
-           <Resource  name="jdbc/dataSource"   driverClassName="org.postgresql.Driver"
-                      url="jdbc:postgresql://localhost:5432/postgresql"   type="javax.sql.DataSource"
-                      username="postgresql"  password="postgresql" />
-           <Loader className="org.apache.catalina.loader.RepositoryLoader"/>
-	</Context>
-      </Host>
-    </Engine>
-  </Service>
-</Server>
+           compression="off" />
+    <Server name="server1" shutdown="8005"  http="8080"  />
+    <Server name="server2" shutdown="8006"  http="8081"  />
+  </Farm>
+
+<!--
+  <Webapps>
+    <Webapp name="${your_app_name}" reloadable="false" docBase="../../../webapps/${your_war_name}">
+      <ResourceRef ref="jdbc/${datasource}"/>
+    </Webapp>
+  </Webapps>
+
+  <Resources>
+    <Resource  name="jdbc/${datasource}"   driverClassName="org.postgresql.Driver"
+                      url="jdbc:postgresql://localhost:5432/postgres"   type="javax.sql.DataSource"
+                      username="postgres"  password="postgres" />
+  </Resources>
+
+  <Deployments>
+    <Deployment webapp="${your_app_name}" on="default" path="/${context_path}"  />
+  </Deployments>
+ -->
+</Tomcat>
+
 {% endhighlight %}
 
 其中Context的写法比较特殊为`docBase="../../../webapps/myapp"`
 
-如果启动服务采用
+如果启动单个服务采用
 
-    $ bin/start.sh server1
+    $ bin/start.sh default.server1
 
-停止服务
+启动所有服务
 
-    $ bin/stop server1
+    $ bin/start.sh default
+
+停止单个服务
+
+    $ bin/stop default.server1
     
 查看日志
 
-    $ tail -f servers/server1/logs/catalina.out
+    $ tail -f servers/default.server1/logs/catalina.out
     
 ### 3. 更新tomcat
 
 当tomcat有了新版本时，可以通过命令进行直接更新
 
 {% highlight shell linenos %}
-# 更新到8.0.14
-$ bin/update 8.0.14
+# 更新到8.0.18
+$ bin/install.sh 8.0.18
 {% endhighlight %}
 
 
