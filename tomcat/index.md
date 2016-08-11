@@ -1,10 +1,10 @@
 ---
 layout: page
-title: "Beangle Tomcat Server"
+title: "Beangle Server"
 ---
 {% include JB/setup %}
 
-Beangle Tomcat 是在Apache Tomcat基础上增加了一些简单的内容，简化和便利war的运行。
+Beangle Server 是在Apache Tomcat基础上增加了一些简单的内容，简化和便利war的运行。
 
 * [支持数据驱动中的密码为加密密码](/tomcat/resource.html)
 * 支持以http的方式从远程服务器获取数据源配置信息
@@ -20,7 +20,7 @@ chmod +x ./netinstall.sh;./netinstall.sh
 
 ### 2. 发布应用和启动服务
 
-Beangle Tomcat Server有特别的目录结构:
+Beangle Server有特别的目录结构:
 
     |-- bin
     |   |-- install.sh(安装或更新tomcat）
@@ -31,7 +31,7 @@ Beangle Tomcat Server有特别的目录结构:
     |-- servers(这里的内容为server运行产生，无需维护)
     `-- webapps(放置war包)
 
-新的war包放置在webapps.在conf中配置一个config.xml。beangle tomcat server不采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。例如：
+新的war包放置在webapps.在conf中配置一个config.xml。beangle  server不采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。例如：
 
 {% highlight xml linenos %}
 <?xml version='1.0' encoding='utf-8'?>
