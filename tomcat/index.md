@@ -31,7 +31,7 @@ Beangle AS Server有特别的目录结构:
     |-- servers(这里的内容为server运行产生，无需维护)
     `-- webapps(放置war包)
 
-新的war包放置在webapps.在conf中配置一个config.xml。beangle tomcat server不采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。例如：
+新的war包放置在webapps.在conf中配置一个config.xml。beangle  server不采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。例如：
 
 {% highlight xml linenos %}
 <?xml version='1.0' encoding='utf-8'?>
