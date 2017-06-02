@@ -13,10 +13,8 @@ Beangle AS Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简单
 
 ### 1. 快速安装
 
-{% highlight xml linenos %}
-$ wget https://raw.githubusercontent.com/beangle/as/master/tomcat/src/main/resources/netinstall.sh;\
-chmod +x ./netinstall.sh;./netinstall.sh
-{% endhighlight %}
+    $ wget https://raw.githubusercontent.com/beangle/as/master/tomcat/src/main/resources/netinstall.sh;\
+    chmod +x ./netinstall.sh;./netinstall.sh
 
 ### 2. 发布应用和启动服务
 
@@ -104,7 +102,5 @@ Beangle AS Server有特别的目录结构:
 
 当tomcat有了新版本时，可以通过命令进行直接更新
 
-{% highlight shell linenos %}
-# 更新到8.0.34
-$ bin/install.sh tomcat 8.0.34
-{% endhighlight %}
+    # 更新到8.0.34
+    $ bin/install.sh tomcat 8.0.34
