@@ -14,7 +14,7 @@ Beangle Tomcat 是在Apache Tomcat基础上增加了一些简单的内容，简�
 ### 1. 快速安装
 
 {% highlight xml linenos %}
-$ wget https://raw.githubusercontent.com/beangle/tomcat/master/server/src/main/resources/netinstall.sh;\
+$ wget https://raw.githubusercontent.com/beangle/as/master/tomcat/src/main/resources/netinstall.sh;\
 chmod +x ./netinstall.sh;./netinstall.sh
 {% endhighlight %}
 
@@ -45,7 +45,7 @@ Beangle Tomcat Server有特别的目录结构:
     <Loader className="org.apache.catalina.loader.RepositoryLoader" cacheLayout="maven2"/>
     <JarScanner scanBootstrapClassPath="false" scanAllDirectories="false" scanAllFiles="false" scanClassPath="false"/>
   </Context>
-  
+
   <Farm name="default" >
     <JvmArgs opts="-noverify -Xmx500M -Xms500M"/>
     <HttpConnector protocol="HTTP/1.1"
@@ -63,7 +63,7 @@ Beangle Tomcat Server有特别的目录结构:
 
 <!--
   <Webapps>
-    <Webapp name="${your_app_name}" reloadable="false" docBase="../../../webapps/${your_war_name}">
+    <Webapp name="${your_app_name}" reloadable="false" docBase="${as.home}/webapps/${your_war_name}">
       <ResourceRef ref="jdbc/${datasource}"/>
     </Webapp>
   </Webapps>
@@ -82,7 +82,7 @@ Beangle Tomcat Server有特别的目录结构:
 
 {% endhighlight %}
 
-其中Context的写法比较特殊为`docBase="../../../webapps/myapp"`
+其中Context的写法比较特殊为`docBase="${as.home}/webapps/myapp"`
 
 如果启动单个服务采用
 
@@ -95,18 +95,16 @@ Beangle Tomcat Server有特别的目录结构:
 停止单个服务
 
     $ bin/stop default.server1
-    
+
 查看日志
 
     $ tail -f servers/default.server1/logs/catalina.out
-    
+
 ### 3. 更新tomcat
 
 当tomcat有了新版本时，可以通过命令进行直接更新
 
 {% highlight shell linenos %}
-# 更新到8.0.18
-$ bin/install.sh 8.0.18
+# 更新到8.0.34
+$ bin/install.sh tomcat 8.0.34
 {% endhighlight %}
-
-

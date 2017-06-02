@@ -10,8 +10,8 @@ tags: [webmvc]
 
 以一个简单的例子来说明，你需要单独写一个工程。
    通过Maven的模版创建工程（老实说，由于maven的依赖项较多，这一步简单但不快速）
-   
-    mvn archetype:generate -B -DgroupId=com.example.message -DartifactId=message -DarchetypeGroupId=org.beangle.webmvc -DarchetypeArtifactId=beangle-webmvc-archetype-starter -DarchetypeVersion=0.1.0
+
+    mvn archetype:generate -B -DgroupId=com.example.message -DartifactId=message -DarchetypeGroupId=org.beangle.webui -DarchetypeArtifactId=beangle-webui-archetype_2.12 -DarchetypeVersion=0.0.6
 
 在生成的目录中增加以下目录结构：
 
@@ -21,9 +21,9 @@ tags: [webmvc]
         `-- resources(简单配置文件)
             `-- META-INF
                `-- beangle
-                  |-- web-cdi.properties
-                  `-- mvc-config.xml
- 
+                  |-- cdi.xml
+                  `-- mvc.xml
+
 action的代码如下:
 
 {% highlight scala linenos %}
@@ -65,9 +65,17 @@ import com.example.message.service.impl.MessageServiceImpl
   }
 {% endhighlight %}
 
-定义META-INF/beangle/web-cdi.properties
+定义META-INF/beangle/cdi.xml
 
-    modules=com.example.message.MessageModule
+    <?xml version="1.0"?>
+    <cdi>
+      <container name="web">
+        <module class="com.example.message.MessageModule"/>
+        <!--
+        <module class="other module"/>
+        -->
+      </container>
+    </cdi>
 
 第三步，定义路由规则
 定义META-INF/beangle/mvc-config.xml。这个文件的定义是一次性的，不因action的数量而变得复杂。
@@ -118,7 +126,7 @@ url部分规定了action到url的路由风格
     # url路径的风格(simple为/my/package/actionName,short为/actionName，seo为/my/package/action_name，plur-seo为/my/package/action_names)
     style=seo
     # url 后缀,可以定义.do,.action
-    suffix="" 
+    suffix=""
 
 #### 三、参数绑定到Action方法
 如果想让您的action方法直接获取参数，而不是通过Params.get()的方式，可以进行直接声明。
@@ -261,7 +269,7 @@ profile中view定义的style分别有full/simple/seo三种，以com.example.mess
 
     //调转到/context/work/message/search/info
     forward(to(this,"info"))
-    
+
     //调转到/context/family/message/search/info
     foreard(to(this,"info","&box=family"))
 
@@ -339,7 +347,7 @@ import org.beangle.webmvc.api.view._
 如果给下载文件起个单独的名称，而非文件名，则需要
 
     Stream(new File("/tmp/path/to/your/pic.gif","我的logo"))
-    
+
 该文件需要浏览器缓存，可以增加过期时间设置
 
     import org.beangle.webmvc.api.util.CacheControl
@@ -366,11 +374,9 @@ import org.beangle.webmvc.api.view._
 
 class LogoAction {
    def index():View={
-     val file = new File("/tmp/path/to/your/pic.gif") 
+     val file = new File("/tmp/path/to/your/pic.gif")
      //或者Status(404)
      if(file.exists) Stream(file) else Status.NotFound
    }
 }
 {% endhighlight %}
-
-
