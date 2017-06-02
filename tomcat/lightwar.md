@@ -58,9 +58,9 @@ Beangle Tomcat Server支持war包声明依赖项，容器加载的方式，从�
   <build>
       <plugins>
         <plugin>
-          <groupId>org.beangle.maven</groupId>  
-          <artifactId>beangle-maven-plugin</artifactId>  
-          <version>0.1.0</version>
+          <groupId>org.beangle.maven</groupId>
+          <artifactId>beangle-maven-plugin</artifactId>
+          <version>0.3.0</version>
           <executions>
             <execution>
               <id>generate</id>
@@ -76,4 +76,3 @@ Beangle Tomcat Server支持war包声明依赖项，容器加载的方式，从�
 {% endhighlight %}
 
 直接运行mvn clean install即可将自动生成container.dependencies，并打到包中。
-
