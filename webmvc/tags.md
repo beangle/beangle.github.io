@@ -22,11 +22,11 @@ Beangle webmvc提供了以b开头的一组标签和方法, 他利用freemarker,�
 
 #### web资源主题支持
 Beangle对web资源主题的布局如下
-```
+~~~
 static/themes/
           themename/icons/[16x16|48x48]/any.png
           themename/any.css
-```
+~~~
 
 * 访问当前主题的名称 b.theme.ui
 * 访问当前主题的css为[@b.css href="my.css"/]
@@ -36,12 +36,12 @@ static/themes/
 #### web组件
 
 * anchor(a) 能够进行异步访问的锚
-```
+~~~html
   [@b.a href="!info?id=4" href="mydiv"/]
-```
+~~~
 
 * grid(row/col/boxcol) 进行数据表格样式显示
-```
+~~~
 [@b.grid items=users var="user"]
     [@b.gridbar]
     bar.addItem("${b.text("action.new")}",action.add());
@@ -74,10 +74,10 @@ static/themes/
         [@b.col property="status" title="common.status"][@enableInfo user.enabled/][/@]
     [/@]
 [/@]
-```
+~~~
 
 * nav(navmenu/navitem)
-```
+~~~
     [@b.navmenu title="权限管理"]
         [@b.navitem title="控制台" href="index"/]
         [@b.navitem title="用户" href="/security/user" /]
@@ -89,30 +89,30 @@ static/themes/
         [@b.navitem title="系统监控" href="/security/monitor" /]
         [@b.navitem title="我的账户" href="/security/my?nav=true" /]
     [/@]
-```
+~~~
 * form/submit 异步表单
-```
+~~~
     [@b.form action="!save"]
         some html
     [/@]
-```
+~~~
 * div 异步容器
-```
+~~~
     [@b.div href="!info?id=1"/]
-```
+~~~
 * head/foot 根据是否为ajax请求，增加html头和脚
-```
+~~~
     [@b.head/][/@b.foot/]
-```
+~~~
 * toolbar
-```
+~~~
     [@b.toolbar title="my title"]
       bar.addItem("upload",uploadfunciton);
     [/@]
-```
+~~~
 * pagebar
 * messages(actionerror/actionmessage)
 * datepicker
-```
+~~~
     [@b.datepicker format="YYYY-MM-dd HH:mm" value="2010-09-10 20:30"/]
-```
+~~~

@@ -16,10 +16,10 @@ Beangle Tomcat ResourceFactory是为Tomcat提供密码和配置托管提供的Fa
 通常使用Apache Tomcat,数据源配置会放在$CATALINA_HOME/conf/catalina/localhost/app1.xml(或者conf/server.xml),密码会暴露出来。
 例如
 {% highlight xml linenos %}
-<Resource 
+<Resource
   name="jdbc/app1"
   driverClassName="oracle.jdbc.driver.OracleDriver"
-  url="jdbc:oracle:thin:@database_server:1521:orcl" 
+  url="jdbc:oracle:thin:@database_server:1521:orcl"
   type="javax.sql.DataSource"
   username="app1_user_name"
   password="app1_password"
@@ -44,11 +44,11 @@ $ bin/gen-pass.sh 123456 mykey
 
 这样上述配置可以改为：
 {% highlight xml linenos %}
-<Resource 
+<Resource
   name="jdbc/app1"
   factory="org.beangle.tomcat.jdbc.EncryptedDataSourceFactory"
   driverClassName="oracle.jdbc.driver.OracleDriver"
-  url="jdbc:oracle:thin:@database_server:1521:orcl" 
+  url="jdbc:oracle:thin:@database_server:1521:orcl"
   type="javax.sql.DataSource"
   username="app1_user_name"
   password="fd7f189b5c6b7140ca06390b61a06a35"
@@ -75,10 +75,10 @@ export jdbc_app1_secret
 
 例如：
 {% highlight xml linenos %}
-<Resource 
+<Resource
   name="jdbc/app1"
   factory="org.beangle.tomcat.jdbc.EncryptedDataSourceFactory"
-  url="http://mydatasource.com/app/myid?mykey" 
+  url="http://mydatasource.com/app/myid?mykey"
   type="javax.sql.DataSource"
   />
 {% endhighlight %}
@@ -93,4 +93,3 @@ url中返回的内容以json样式呈现例如：
   maxActive=20
 }
 {% endhighlight %}
-
