@@ -42,26 +42,27 @@ tags: [spring]
       <bean id="BeangeSpringConfigProcessor" class="org.beangle.inject.spring.config.SpringConfigProcessor">
         <property name="reconfigResources" value=";classpath*:spring-config.xml"/>
       </bean>
-	
+
       <bean class="org.beangle.sample.DefaultModule"/>
     </beans>
 
 以上的例子完成了四个bean的定义，等价与一下xml配置。
 
+~~~xml
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-      <bean class="org.beangle.sample.service.PermissionServiceImpl" 
+      <bean class="org.beangle.sample.service.PermissionServiceImpl"
         id="org.beangle.sample.service.PermissionServiceImpl" autowire="no"/>
-	
-      <bean class="org.beangle.sample.service.UserServiceImpl" 
+
+      <bean class="org.beangle.sample.service.UserServiceImpl"
          id="org.beangle.sample.service.UserServiceImpl" autowire="no"/>
 
-      <bean class="org.beangle.sample.service.RoleServiceImpl" 
+      <bean class="org.beangle.sample.service.RoleServiceImpl"
          id="org.beangle.sample.service.RoleServiceImpl" autowire="no"/>
-      
+
       <bean class="org.beangle.sample.web.action.UserAction"
         id="org.beangle.sample.web.action.UserAction" autowire="no">
         <property name="userService" ref="org.beangle.sample.service.UserServiceImpl"/>
@@ -69,7 +70,7 @@ tags: [spring]
         <property name="permissionService" ref="org.beangle.sample.service.PermissionServiceImpl"/>
       </bean>
     </beans>
-
+~~~
 ### 原理和要求
 SpringConfigProcessor后处理器，通过查询spring中注册的类似DefaultModule之类的bean，提取其中的"配置"，然后注册到spring中。
 从功效上类似xml注册，在运行期间，不参与bean实例化，因此不存在运行开销。
@@ -102,28 +103,32 @@ SpringConfigProcessor后处理器，通过查询spring中注册的类似DefaultM
 例如ProviderManager中管理了providers列表，类型为List<Provider>;
 注入方式如下：
 
+~~~scala
     bind(ProviderManage.class).property("providers",list(AProvider.class,BProvider.class));
-
+~~~
 如果采用注册好的bean，采用形式如下：
-
+~~~scala
     bind("aprovider",AProvider.class).property("superman","admin");
     bind(ProviderManage.class).property("providers",list(ref("aprovider"),BProvider.class));
+~~~
 而BProvider则被注册为一个名称较长的内部单例bean。或者
-
+~~~scala
     bind(AProvider.class).property("superman","admin");
     bind(BProvider.class).property("sompeproperty","value");
     bind(ProviderManage.class).property("providers",listref(AProvider.class,BProvider.class));
+~~~
 类似array，set，之类的可以采用set(),array()语法注入多个bean。
 
 针对Map,采用的语法稍有不同：
-
+~~~scala
     bind("restrictionService", RestrictionServiceImpl.class).property("providers",
         map(entry("csv", CsvDataResolver.class), entry("oql", OqlDataProvider.class))).property(
         "dataResolver",IdentifierDataResolver.class);
+~~~
 采用entry(key,value)函数表示一个元素。
 
 所有在集合、map中使用的Class类型数据，如果没有采用ref(Some.class)形式，而是直接使用Some.class,效果是不一样的。例如
-
+~~~scala
     // bind(AProvider.class,BProvider.class)；不需要这样的代码了
     // list(Class<?> ... classes)会直接创建bean的定义
     bind(ProviderManage.class).property("providers",list(AProvider.class,BProvider.class));
@@ -131,3 +136,4 @@ SpringConfigProcessor后处理器，通过查询spring中注册的类似DefaultM
     bind(ProviderManage.class).property("providers",list(ref(AProvider.class),ref(BProvider.class)));
     //或者使用listref
     bind(ProviderManage.class).property("providers",listref(AProvider.class,BProvider.class));
+~~~
