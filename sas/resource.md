@@ -1,10 +1,10 @@
 ---
 layout: page
-title: "Tomcat Resource"
+title: "Beangle Sas Resource"
 ---
 {% include JB/setup %}
 
-Beangle Tomcat ResourceFactory是为Tomcat提供密码和配置托管提供的Factory。
+Beangle Sas ResourceFactory是为Tomcat提供密码和配置托管提供的Factory。
 
 * 支持数据驱动中的密码为加密密码
 * 支持以http的方式从远程服务器获取数据源配置信息

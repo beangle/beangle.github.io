@@ -1,10 +1,10 @@
 ---
 layout: page
-title: "Tomcat Light War"
+title: "Sas Light War"
 ---
 {% include JB/setup %}
 
-Beangle Tomcat Server支持war包声明依赖项，容器加载的方式，从而降低war包体积的做法。
+Beangle Sas Server支持war包声明依赖项，容器加载的方式，从而降低war包体积的做法。
 
 ### 1. 手工制作轻量级war包
 每个应用依赖的包和其他应用之间多少有些重复，例如使用了Struts2,Log4j等第三方开源的包。这些包通常都可以在maven仓库上可以下到。
@@ -27,7 +27,7 @@ Beangle Tomcat Server支持war包声明依赖项，容器加载的方式，从�
 在youcontext.xml或者server.xml中的Context定义中，添加
 
 {% highlight xml linenos %}
-<Loader className="org.apache.catalina.loader.RepositoryLoader" cacheLayout="maven2"/>
+<Loader className="org.apache.catalina.loader.RepositoryLoader"/>
 {% endhighlight %}
 其中cacheLayout表示本地缓存的风格，支持maven2和ivy2。可以补充cacheBase属性，设置本地缓存的位置(例如/opt/maven/repository)
 

@@ -1,14 +1,14 @@
 ---
 layout: page
-title: "Beangle AS Server"
+title: "Beangle Sas Server"
 ---
 {% include JB/setup %}
 
-Beangle AS Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简单的内容，简化和便利war的运行。
+Beangle Sas Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简单的内容，简化和便利war的运行。
 
-* [支持数据驱动中的密码为加密密码](/as/resource.html)
+* [支持数据驱动中的密码为加密密码](/sas/resource.html)
 * 支持以http的方式从远程服务器获取数据源配置信息
-* [支持轻量级的war包运行](/as/lightwar.html)(如果内部WEB/lib的包都是maven仓库上可以下载的，这部分包可以省去)
+* [支持轻量级的war包运行](/sas/lightwar.html)(如果内部WEB/lib的包都是maven仓库上可以下载的，这部分包可以省去)
 * 支持快速创建多个server,而不用复制tomcat
 
 ### 1. 快速安装
@@ -18,7 +18,7 @@ Beangle AS Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简单
 
 ### 2. 发布应用和启动服务
 
-Beangle AS Server有特别的目录结构:
+Beangle Sas Server有特别的目录结构:
 
     |-- bin
     |   |-- install.sh(安装或更新tomcat）
@@ -33,20 +33,27 @@ Beangle AS Server有特别的目录结构:
 
 {% highlight xml linenos %}
 <?xml version='1.0' encoding='utf-8'?>
-<Tomcat version="8.0.17">
-  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="off" />
-  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
-  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
-  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+<Sas>
+  <Repository remote="maven.aliyun.com/nexus/content/groups/public"/>
 
-  <Context>
-    <Loader className="org.apache.catalina.loader.RepositoryLoader" cacheLayout="maven2"/>
-    <JarScanner scanBootstrapClassPath="false" scanAllDirectories="false" scanAllFiles="false" scanClassPath="false"/>
-  </Context>
+  <Engines>
+    <Engine name="tomcat80" type="catalina" version="8.0.44">
+      <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="off" />
+      <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+      <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+      <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
 
-  <Farm name="default" >
-    <JvmArgs opts="-noverify -Xmx500M -Xms500M"/>
-    <HttpConnector protocol="HTTP/1.1"
+      <Context>
+        <Loader className="org.apache.catalina.loader.RepositoryLoader"/>
+        <JarScanner scanBootstrapClassPath="false" scanAllDirectories="false" scanAllFiles="false" scanClassPath="false"/>
+      </Context>
+    </Engine>
+  </Engines>
+
+  <Farms>
+    <Farm name="default" engine="tomcat80">
+      <JvmArgs opts="-noverify -Xmx500M -Xms500M"/>
+      <HttpConnector protocol="HTTP/1.1"
            URIEncoding="UTF-8"
            enableLookups="false"
            acceptCount="100"
@@ -55,9 +62,10 @@ Beangle AS Server有特别的目录结构:
            connectionTimeout="20000"
            disableUploadTimeout="true"
            compression="off" />
-    <Server name="server1" shutdown="8005"  http="8080"  />
-    <Server name="server2" shutdown="8006"  http="8081"  />
-  </Farm>
+      <Server name="server1" http="8080"  />
+      <Server name="server2" http="8081"  />
+    </Farm>
+  </Farms>
 
 <!--
   <Webapps>
