@@ -25,15 +25,16 @@ Beangle Sas Server有特别的目录结构:
     |   |-- start.sh(启动服务)
     |   `-- stop.sh(停止服务)
     |-- conf(配置文件)
-    |-- tomcat(tomcat文件,不要编辑这里的文件，升级时会全部删除)
+    |-- engines(不同版本的tomcat，无需维护)
     |-- servers(这里的内容为server运行产生，无需维护)
     `-- webapps(放置war包)
 
-新的war包放置在webapps.在conf中配置一个config.xml。beangle  server不采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。例如：
+新的war包放置在webapps.在conf中配置一个server.xml。beangle sas server没有采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。例如：
 
 {% highlight xml linenos %}
 <?xml version='1.0' encoding='utf-8'?>
 <Sas>
+  <!--从这里下载webapp的各类依赖性，如果涉及到没有开源的包，可以改为自己的伺服-->
   <Repository remote="maven.aliyun.com/nexus/content/groups/public"/>
 
   <Engines>
