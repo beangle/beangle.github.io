@@ -14,7 +14,7 @@ Beangle Sas Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简�
 ### 1. 快速安装
 
 {% highlight bash linenos %}
-wget https://raw.githubusercontent.com/beangle/sas/master/server/src/main/resources/netinstall.sh; chmod +x ./netinstall.sh;./netinstall.sh
+wget https://beangle.github.io/sas/netinstall.sh; chmod +x ./netinstall.sh;./netinstall.sh
 {% endhighlight %}
 ### 2. 发布应用和启动服务
 
@@ -33,7 +33,7 @@ Beangle Sas Server有特别的目录结构:
 
 {% highlight xml linenos %}
 <?xml version='1.0' encoding='utf-8'?>
-<Sas>
+<Sas version="0.3.2">
   <!--从这里下载webapp的各类依赖性，如果涉及到没有开源的包，可以改为自己的伺服-->
   <Repository remote="maven.aliyun.com/nexus/content/groups/public"/>
 
@@ -58,7 +58,7 @@ Beangle Sas Server有特别的目录结构:
 
 <!--
   <Webapps>
-    <Webapp name="${your_app_name}" reloadable="false" docBase="${as.home}/webapps/${your_war_name}">
+    <Webapp name="${your_app_name}" reloadable="false" docBase="${sas.home}/webapps/${your_war_name}">
       <ResourceRef ref="jdbc/${datasource}"/>
     </Webapp>
   </Webapps>
@@ -73,7 +73,7 @@ Beangle Sas Server有特别的目录结构:
     <Deployment webapp="${your_app_name}" on="default" path="/${context_path}"  />
   </Deployments>
  -->
-</Tomcat>
+</Sas>
 
 {% endhighlight %}
 
