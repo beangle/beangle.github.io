@@ -60,16 +60,26 @@ Beangle Sas Server支持war包声明依赖项，容器加载的方式，从而�
         <plugin>
           <groupId>org.beangle.maven</groupId>
           <artifactId>beangle-maven-plugin</artifactId>
-          <version>0.3.0</version>
+          <version>0.3.8</version>
           <executions>
             <execution>
               <id>generate</id>
-              <phase>compile</phase>
+              <phase>prepare-package</phase>
               <goals>
-                <goal>gen-dependency</goal>
+                <goal>sas</goal>
               </goals>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.0.0</version>
+          <configuration>
+            <packagingExcludes>
+            %regex[WEB-INF/lib/.*[^T].jar]
+            </packagingExcludes>
+          </configuration>
         </plugin>
       </plugins>
     </build>
