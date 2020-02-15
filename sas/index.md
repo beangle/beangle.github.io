@@ -91,7 +91,7 @@ Beangle Sas Server有特别的目录结构:
 
 查看日志
 
-    $ tail -f servers/default.server1/logs/catalina.out
+    $ tail -f logs/default.server1/console.out
 
 生成代理配置
 
