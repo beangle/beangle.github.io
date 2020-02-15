@@ -6,8 +6,6 @@ title: "Beangle Sas Server"
 
 Beangle Sas Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简单的内容，简化和便利war的运行。
 
-* [支持数据驱动中的密码为加密密码](/sas/resource.html)
-* 支持以http的方式从远程服务器获取数据源配置信息
 * [支持轻量级的war包运行](/sas/lightwar.html)(如果内部WEB/lib的包都是maven仓库上可以下载的，这部分包可以省去)
 * 支持快速创建多个server,而不用复制tomcat
 
@@ -33,7 +31,7 @@ Beangle Sas Server有特别的目录结构:
 
 {% highlight xml linenos %}
 <?xml version='1.0' encoding='utf-8'?>
-<Sas version="0.3.2">
+<Sas version="0.6.4">
   <!--从这里下载webapp的各类依赖性，如果涉及到没有开源的包，可以改为自己的伺服-->
   <Repository remote="maven.aliyun.com/nexus/content/groups/public"/>
 
@@ -95,11 +93,17 @@ Beangle Sas Server有特别的目录结构:
 
     $ tail -f servers/default.server1/logs/catalina.out
 
+生成代理配置
+
+    $ bin/proxy.sh
+
 ### 3. 更新tomcat
 
 当tomcat有了新版本时，可以通过修改server.xml中的其引擎version属性,之后重启应用直接更新
 {% highlight xml linenos %}
-<Engine name="tomcat80" type="tomcat" version="8.5.15">
+<Engine name="tomcat80" type="tomcat" version="9.0.30">
 </Engine>
 {% endhighlight %}
-目前支持tomcat8.0到8.5系列的版本.
+
+0.3.x 支持8.0到8.5之间的版本，0.4.x之后支持tomcat9.0以上系列的版本.
+

@@ -1,12 +1,12 @@
 #!/bin/sh
 
-beangle_sas_version="0.3.2"
+beangle_sas_version="0.6.4"
 if [ "$1" != "" ]; then
   beangle_sas_version="$1"
 fi
 
 if [ ! -f beangle-sas-$beangle_sas_version.zip ]; then
-  wget "http://repo1.maven.org/maven2/org/beangle/sas/beangle-sas/$beangle_sas_version/beangle-sas-$beangle_sas_version.zip"
+  wget "https://repo1.maven.org/maven2/org/beangle/sas/beangle-sas/$beangle_sas_version/beangle-sas-$beangle_sas_version.zip"
 fi
 
 if [ -f beangle-sas-$beangle_sas_version.zip ]; then
