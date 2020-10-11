@@ -16,6 +16,7 @@ Beangle立足企业软件开发，提供敏捷、基于约定(Convention Over Co
 * [WebMVC](/webmvc/index.html) 提供webmvc所需的约定，集成spring和struts提供运行环境
 * [Security](/security/index.html) 提供权限定义和鉴权的必要设施，可以集成到web环境中
 * [Sas](/sas/index.html) 提供简化配置和便利部署的能力
+* [Micdn](/micdn/index.html) 部署简易的cdn
 
 ## 许可证
 [LGPL v3](http://www.gnu.org/licenses/lgpl.txt)
