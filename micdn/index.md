@@ -36,7 +36,7 @@ Micdn是一个小型的cdn服务器。它包含两个组件，blob是一个集�
 注意其中的base默认是~/.ems/blob,hostname一定要根据实际情况进行替换。
 {% highlight xml%}
 <?xml version="1.0" encoding="UTF-8"?>
-<blob base=~/.ems/blob" maxSize="50M" hostname="system.school.edu.cn">
+<blob base="~/.ems/blob" maxSize="50M" hostname="system.school.edu.cn">
   <dataSource>
     <serverName>${serverName}</serverName>
     <databaseName>${databaseName}</databaseName>
@@ -72,7 +72,7 @@ Micdn是一个小型的cdn服务器。它包含两个组件，blob是一个集�
 
 文件服务器需要连接数据，登记文件元信息，需要执行以下sql语句。
 {% highlight sql%}
-create schema blob;
+create schema blb;
 create table blb.blob_metas(id bigint,domain_id int4,owner varchar(100) not null,name varchar(300)  not null,
                               size bigint  not null,sha varchar(100)  not null,media_type varchar(100)  not null,
                               profile_id int4 not null,file_path varchar(400) not null,updated_at timestamp not null);
