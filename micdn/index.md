@@ -27,10 +27,10 @@ Micdn是一个小型的cdn服务器。它包含两个组件，blob是一个集�
 
 ### 2. 在用户目录下准备blob所需配置
 
-以当前用户为beangle,在/home/beangle/.ems/建立blob相关目录
+以当前用户为beangle,在~/.ems/建立blob相关目录
 
-    [beangle@centos8 ~]$ mkdir -p /home/beangle/.ems/micdn
-    [beangle@centos8 ~]$ touch /home/beangle/.ems/micdn/blob.xml
+    [beangle@centos8 ~]$ mkdir -p ~/.ems/micdn
+    [beangle@centos8 ~]$ touch ~/.ems/micdn/blob.xml
 
 并将以下xml中的${}的变量内容，根据实际数据库的配置情况进行替换。
 注意其中的base默认是~/.ems/blob,hostname一定要根据实际情况进行替换。
@@ -49,10 +49,10 @@ Micdn是一个小型的cdn服务器。它包含两个组件，blob是一个集�
 
 ### 3. 在用户目录下准备asset所需配置
 
-在/home/beangle/.ems/建立asset相关目录
+在~/.ems/建立asset相关目录
 
-    [beangle@centos8 ~]$ mkdir -p /home/beangle/.ems/micdn
-    [beangle@centos8 ~]$ touch /home/beangle/.ems/micdn/asset.xml
+    [beangle@centos8 ~]$ mkdir -p ~/.ems/micdn
+    [beangle@centos8 ~]$ touch ~/.ems/micdn/asset.xml
 
 将项目需要的静态资源生命在asset.xml中。
 {% highlight xml%}
