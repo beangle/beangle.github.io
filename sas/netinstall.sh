@@ -13,6 +13,7 @@ if [ -f beangle-sas-$beangle_sas_version.zip ]; then
   export SAS_SERVER="beangle-sas-$beangle_sas_version"
   unzip -q $SAS_SERVER.zip
 
+  rm -rf META-INF
   cd $SAS_SERVER
   chmod a+x bin/*.sh
   bin/init.sh
