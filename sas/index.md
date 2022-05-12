@@ -6,7 +6,7 @@ title: "Beangle Sas Server"
 
 Beangle Sas Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简单的内容，简化和便利war的运行。
 
-* [支持轻量级的war包运行](/sas/lightwar.html)(如果内部WEB/lib的包都是maven仓库上可以下载的，这部分包可以省去)
+* [支持轻量级的war包运行](/sas/lightwar.html)(如果内部WEB/lib的包都是maven仓库上可以下载的，这部分包可以省去,不用放在war中)
 * 支持快速创建多个server,而不用复制tomcat
 
 ### 1. 快速安装
@@ -31,7 +31,7 @@ Beangle Sas Server有特别的目录结构:
     |-- engines(不同版本的tomcat，无需维护)
     |-- servers(这里的内容为server运行产生，无需维护)
     |-- logs 产生的日志
-    `-- webapps(放置war包)
+    `-- webapps(放置war包,尤其是SNAPSHOT版本的)
 
 新的war包放置在webapps.在conf中配置一个server.xml。Beangle SAS server没有采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。
 
@@ -66,77 +66,57 @@ Beangle Sas Server有特别的目录结构:
   </Hosts>
   <Engines>
     <Engine name="tomcat9" type="tomcat" version="9.0.35" jspSupport="true">
-      <Jar gav="com.oracle:ojdbc6:11.2.0.1.0"/>
+      <Jar uri="gav://com.oracle:ojdbc6:11.2.0.1.0"/>
     </Engine>
-    <Engine name="tomcat10" type="tomcat" version="10.0.0-M8">
-      <Jar gav="org.postgresql:postgresql:42.2.6"/>
+    <Engine name="tomcat10" type="tomcat" version="10.0.20">
+      <Jar gav="gav://org.postgresql:postgresql:42.2.6"/>
     </Engine>
   </Engines>
 
   <Farms>
-    <Farm name="farm1" engine="tomcat9" hosts="web1">
-      <Options>-noverify -server -Xms2G -Xmx2G  -Djava.security.egd=file:/dev/./urandom</Options>
-      <Http acceptCount="200"  maxThreads="800"  minSpareThreads="10" connectionTimeout="20000" compression="off" />
-      <Server name="server1"  http="8080"  />
+    <Farm name="farm1" engine="tomcat9" maxHeapSize="2000">
+      <Http acceptCount="200"  maxThreads="800"/>
+      <ProxyOptions>
+        balance roundrobin
+        http-response set-header X-XSS-Protection 1;\ mode=block
+        http-response set-header X-Frame-Options DENY
+        http-response set-header X-Content-Type-Options nosniff
+      </ProxyOptions>
+      <Server name="server1"  http="8080" host="web1" />
     </Farm>
 
-    <Farm name="farm2" engine="tomcat10" hosts="web2">
-      <Options>-noverify -server -Xms2G -Xmx2G  -Djava.security.egd=file:/dev/./urandom</Options>
-      <Server name="server1" http="8081"/>
+    <Farm name="farm2" engine="tomcat10" maxHeapSize="2000">
+      <Server name="server1" http="8081" host="web2"/>
     </Farm>
 
-    <Farm name="farm3" engine="tomcat10" hosts="web1,web2">
-      <Options>-noverify -server -Xms250M -Xmx500M  -Djava.security.egd=file:/dev/./urandom</Options>
-      <Http acceptCount="200"  maxThreads="800"  minSpareThreads="10" connectionTimeout="20000" compression="off" />
-      <Server name="server1"  http="9080"  />
-      <Server name="server2"  http="9081"  />
+    <Farm name="farm3" engine="tomcat10" hosts="," maxHeapSize="500">
+      <ProxyOptions>
+        balance roundrobin
+        cookie SERVERID insert indirect nocache
+      </ProxyOptions>
+      <Server name="server1"  http="9080" host="web1" proxyOptions="check cookie s1"/>
+      <Server name="server2"  http="9081" host="web1" proxyOptions="check cookie s2"/>
+      <Server name="server3"  http="9080" host="web2" proxyOptions="check cookie s3"/>
+      <Server name="server4"  http="9081" host="web2" proxyOptions="check cookie s4"/>
     </Farm>
   </Farms>
 
   <Webapps>
     <!--gav 是group-artifact-version的缩写，表示该组件在maven仓库的信息-->
     <!--maven仓库上没有的war包，可以省去该属性，转而写成docBase="${sas.home}/webapps/app1.war"-->
-    <Webapp name="app1"  gav="org.group:group-app1:0.x.x" />
-    <Webapp name="app2"  gav="org.group:group-app2:0.x.x" />
-    <Webapp name="app3"  gav="org.group:group-app3:0.x.x" />
-    <Webapp name="app4"  gav="org.group:group-app4:0.x.x"/>
+    <Webapp name="app1"  uri="gav://org.group:group-app1:0.x.x" runAt="group1" path="/app1" />
+    <Webapp name="app2"  uri="gav://org.group:group-app2:0.x.x" runAt="group1" path="/app2"/>
+    <Webapp name="app3"  uri="gav://org.group:group-app3:0.x.x" runAt="farm2" path="/app3"/>
+    <Webapp name="app4"  uri="gav://org.group:group-app4:0.x.x" runAt="farm2" path="/app4"/>
 
-    <Webapp name="app_index" gav="org.group:group-app_index:0.x.x"/>
+    <Webapp name="app_index" uri="gav://org.group:group-app_index:0.x.x"/>
   </Webapps>
 
   <!--配置代理-->
   <Proxy engine="haproxy" hostname="your.domain.name">
     <!--启用https-->
     <Https/>
-    <!--入口group1，对应服务web1:8080-->
-    <Backend name="group1" servers="farm1">
-      <Options>
-        balance roundrobin
-        http-response set-header X-XSS-Protection 1;\ mode=block
-        http-response set-header X-Frame-Options DENY
-        http-response set-header X-Content-Type-Options nosniff
-      </Options>
-    </Backend>
-    <!--省去group2的入口配置，这里自动创建-->
-    <!--入口group3，对应服务web1上的9080端口和web2上的9081端口-->
-    <Backend name="group3" serves="farm3">
-      <Options>
-        balance roundrobin
-        cookie SERVERID insert indirect nocache
-      </Options>
-      <Server name="farm3.server1" host="web1" options="check cookie s1"/>
-      <Server name="farm3.server2" host="web2" options="check cookie s2"/>
-    </Backend>
   </Proxy>
-
-  <Deployments>
-    <!--on表示负载中的人口，或者farm以及farm上的server-->
-    <Deployment webapp="app1" on="group1" path="/app1" />
-    <Deployment webapp="app2" on="group1" path="/app2" />
-    <Deployment webapp="app3" on="farm2" path="/app3" />
-    <Deployment webapp="app4" on="farm2" path="/app4" />
-    <Deployment webapp="app4" on="group2" path="/app4" />
-  </Deployments>
 </Sas>
 {% endhighlight %}
 
