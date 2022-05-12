@@ -57,7 +57,7 @@ Beangle Sas Server有特别的目录结构:
 
 {% highlight xml linenos %}
 <?xml version='1.0' encoding='utf-8'?>
-<Sas version="0.8.1">
+<Sas version="0.10.1">
   <!--从这里下载webapp的各类依赖性，如果涉及到没有开源的包，可以改为自己的伺服-->
   <Repository remote="maven.aliyun.com/nexus/content/groups/public"/>
   <Hosts>
