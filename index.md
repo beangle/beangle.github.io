@@ -15,11 +15,11 @@ hero:
       link: /docs/spring
 
 features:
-  - title: 🎡 Sas Server
+  - title: <a href='/docs/sas'>🎡 Java Web Server<br>Beangle Sas Server</a>
     details: 运行轻量级war包，集群运行和管理服务
-  - title: <img src='https://hibernate.org/images/hibernate-logo.svg' style='height:30px'/> Hibernate映射简化
+  - title: <a href='/docs/data'><img src='https://hibernate.org/images/hibernate-logo.svg' style='height:30px'/>Hibernate映射简化</a>
     details: 无注解，无XML，简单映射你的实体
-  - title: <img src='https://spring.io/img/spring-2.svg' style='height:30px;'/>Spring 绑定简化
+  - title: <a href='/docs/spring'><img src='https://spring.io/img/spring-2.svg' style='height:30px;'/>Spring 绑定简化</a>
     details: 无注解，不扫描，简单绑定你的服务
 ---
 

@@ -25,3 +25,7 @@
 .vp-doc p {
   text-indent: 2em;
 }
+
+.vp-doc li p:first-child{
+  text-indent: 0em;
+}
