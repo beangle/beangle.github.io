@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Beangle Software",
+  title: "⚒️Beangle Software",
   description: "Beangle provides agile development scaffold and toolkits",
   markdown:{
     toc:{
@@ -12,8 +12,8 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Documents', link: '/docs' }
+      { text: '🏠Home', link: '/' },
+      { text: '📚Documents', link: '/docs' }
     ],
     outline: {
       label: '页面导航',
@@ -23,12 +23,12 @@ export default defineConfig({
       {
         text: 'Projects',
         items: [
-          { text: 'Commons', link: '/docs/commons/core' },
-          { text: 'Data', link: '/docs/data' },
-          { text: 'Micdn', link: '/docs/micdn' },
-          { text: 'Sas', link: '/docs/sas' },
-          { text: 'Spring', link: '/docs/spring' },
-          { text: 'WebMVC', link: '/docs/webmvc' },
+          { text: '🧰Commons', link: '/docs/commons/core' },
+          { text: '📈Data', link: '/docs/data' },
+          { text: '✳️Micdn', link: '/docs/micdn' },
+          { text: '🎡Sas', link: '/docs/sas' },
+          { text: '⚙️Spring', link: '/docs/spring' },
+          { text: '✨WebMVC', link: '/docs/webmvc' },
         ]
       }
     ],

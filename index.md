@@ -8,14 +8,14 @@ hero:
   tagline: My great project tagline
   actions:
     - theme: brand
-      text: 🛫 Sas Server
+      text: 🎡 Sas Server
       link: /docs/sas
     - theme: alt
       text: 🫘Spring Binding
       link: /docs/spring
 
 features:
-  - title: 🛫 Sas Server
+  - title: 🎡 Sas Server
     details: 运行轻量级war包，集群运行和管理服务
   - title: <img src='https://hibernate.org/images/hibernate-logo.svg' style='height:30px'/> Hibernate映射简化
     details: 无注解，无XML，简单映射你的实体
