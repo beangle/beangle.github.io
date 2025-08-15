@@ -8,7 +8,6 @@ Beangle立足企业软件开发，提供敏捷、基于约定(Convention Over Co
 * [Spring](/docs/spring/index.html) 提供container支持，集成spring、hibernate
 * [Data](/docs/data/index.html) 提供基于数据模型的定义、转化、查询支持，集成jpa、hibernate
 * [WebMVC](/docs/webmvc/index.html) 提供webmvc所需的约定，集成spring和struts提供运行环境
-* [Security](/docs/security/index.html) 提供权限定义和鉴权的必要设施，可以集成到web环境中
 * [Sas](/docs/sas/index.html) 提供简化配置和便利部署的能力
 * [Micdn](/docs/micdn/index.html) 部署简易的cdn
 

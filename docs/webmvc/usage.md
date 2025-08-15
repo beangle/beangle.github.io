@@ -90,7 +90,7 @@ import com.example.message.service.impl.MessageServiceImpl
 第四步 运行
 
 可以选择依赖beangle-webmvc-webxml配置web.xml，运行该例子。
-http://localhost:8080/context/message/search
+`http://localhost:8080/context/message/search`
 
 
 ## 二、mvc-config.xml详解
@@ -147,7 +147,7 @@ class SearchAction(var messageService:MessageService) extends ActionSupport{
 ```
 
 这样访问方式仍旧不变，却比较有利于测试。
-http://localhost:8080/context/message/search/info?message_id=1234
+`http://localhost:8080/context/message/search/info?message_id=1234`
 
 ## 四、URL参数化
 有时考虑到搜索引擎，将url趋向静态化一些，可以将url中部分查询参数(queryString)放到url中。例如消息管理中，查询消息的地址为/context/message/search?box=work,可以将其变为/context/message/work/search
