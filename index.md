@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "Beangle Software"
   text: "简单有效的开发工具包"
-  tagline: My great project tagline
+  tagline: 使用成熟、稳定的技术，提供基于约定配置的快捷开发工具类库
   actions:
     - theme: brand
       text: 🎡 Sas Server
