@@ -1,15 +1,5 @@
-*~
-.*
-*.lock
-
-# jykyll build output directies
-_site
-_theme_packages/*
-
-Thumbs.db
+node_modules
+dist
+cache
+.temp
 .DS_Store
-
-!.gitkeep
-
-.rbenv-version
-.rvmrc

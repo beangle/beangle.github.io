@@ -1,22 +1,25 @@
 ---
-layout: page
-title: Beangle
+# https://vitepress.dev/reference/default-theme-home-page
+layout: home
+
+hero:
+  name: "Beangle Software"
+  text: "简单、有效的企业开发工具包"
+  tagline: My great project tagline
+  actions:
+    - theme: brand
+      text: Sas Server
+      link: /docs/sas
+    - theme: alt
+      text: Spring Binding
+      link: /docs/spring
+
+features:
+  - title: Sas Server
+    details: 运行轻量级war包，集群运行和管理服务
+  - title: Hibernate 映射简化
+    details: 无注解，无XML，简单映射你的实体
+  - title: Spring 绑定简化
+    details: 无注解，不扫描，简单绑定你的服务
 ---
-{% include JB/setup %}
 
-## 简介
-
-Beangle立足企业软件开发，提供敏捷、基于约定(Convention Over Configuration)的脚手架和工具包。着力以简化项目构建,并规范项目开发习惯,形成易于管理的最佳实践.
-
-## 项目列表
-
-* [Commons](/commons/index.html) 提供依赖注入，bean，反射，CSV、字符串处理，web通用基础类
-* [Spring](/spring/index.html) 提供container支持，集成spring、hibernate
-* [Data](/data/index.html) 提供基于数据模型的定义、转化、查询支持，集成jpa、hibernate
-* [WebMVC](/webmvc/index.html) 提供webmvc所需的约定，集成spring和struts提供运行环境
-* [Security](/security/index.html) 提供权限定义和鉴权的必要设施，可以集成到web环境中
-* [Sas](/sas/index.html) 提供简化配置和便利部署的能力
-* [Micdn](/micdn/index.html) 部署简易的cdn
-
-## 许可证
-[LGPL v3](http://www.gnu.org/licenses/lgpl.txt)

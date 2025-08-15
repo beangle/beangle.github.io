@@ -1,0 +1,20 @@
+@media (min-width: 768px) {
+  .vp-doc h1 {
+    font-size: 24px;
+  }
+}
+.vp-doc h1 {
+  font-size: 24px;
+}
+
+.vp-doc h2 {
+  font-size: 20px;
+}
+
+.vp-doc h3 {
+  font-size: 18px;
+}
+
+.vp-doc h4 {
+  font-size: 16px;
+}
