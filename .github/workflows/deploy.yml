@@ -38,6 +38,9 @@ jobs:
       - name: Build Site
         run: npm run docs:build
 
+      - name: List dir
+        run : ls -al /home/runner/work/beangle.github.io/beangle.github.io/.vitepress/
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
