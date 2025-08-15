@@ -1,4 +1,4 @@
-# 绑定spring中的Bean
+# <img src='https://spring.io/img/spring-2.svg' style='height:30px;display:inline-block;'/> 绑定spring中的Bean
 
 ## 起因
 如果在spring bean配置中厌烦使用的大量xml，又不能对代码标以注解（annotation），可以使用beangle提供的scala方式进行bean注册。
