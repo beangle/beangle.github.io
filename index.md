@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Beangle Software"
-  text: "简单、有效的企业开发工具包"
+  text: "简单有效的开发工具包"
   tagline: My great project tagline
   actions:
     - theme: brand
