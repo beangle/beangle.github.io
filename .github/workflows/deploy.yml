@@ -1,25 +1,45 @@
 name: Deploy VitePress site to Pages
 
 on:
-push:
-branches:
-- master
+  push:
+    branches: [main]
+
+  # 支持手动在工作流上触发
+  workflow_dispatch:
+
+# 设置时区
+env:
+  TZ: Asia/Shanghai
+
+  # 权限设置
+permissions:
+  # 允许读取仓库内容的权限。
+  contents: read
+  # 允许写入 GitHub Pages 的权限。
+  pages: write
+  # 允许写入 id-token 的权限。
+  id-token: write
+
+# 并发控制配置
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-deploy:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout 🛎️
-uses: actions/checkout@v4
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-- name: Install dependencies
-run: npm install
+      - name: Install dependencies
+        run: npm install
 
-- name: Build Site
-run: npm run docs:build
+      - name: Build Site
+        run: npm run docs:build
 
-- name: Deploy 🚀
-uses: peaceiris/actions-gh-pages@v3
-with:
-github_token: ${{ secrets.GITHUB_TOKEN }}
-publish_dir: docs/.vitepress/dist
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/.vitepress/dist
