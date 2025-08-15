@@ -14,7 +14,7 @@ env:
   # 权限设置
 permissions:
   # 允许读取仓库内容的权限。
-  contents: read
+  contents: write
   # 允许写入 GitHub Pages 的权限。
   pages: write
   # 允许写入 id-token 的权限。
@@ -39,7 +39,7 @@ jobs:
         run: npm run docs:build
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/.vitepress/dist
