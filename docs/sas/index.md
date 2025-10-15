@@ -7,7 +7,7 @@ Beangle Sas Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简�
 ## 1. 快速安装
 
 ```shell
-wget http://beangle.github.io/sas/netinstall.sh; chmod +x ./netinstall.sh;./netinstall.sh
+wget http://beangle.github.io/docs/sas/netinstall.sh; chmod +x ./netinstall.sh;./netinstall.sh
 ```
 
 ## 2. sas目录结构
