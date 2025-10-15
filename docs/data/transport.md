@@ -3,7 +3,7 @@
 ## 1. 快速安装
 
 ```shell
-wget http://beangle.github.io/docs/data/sqlplus.sh; chmod +x ./sqlplus.sh
+wget http://beangle.github.io/scripts/sqlplus.sh; chmod +x ./sqlplus.sh
 ```
 
 ## 2. 如何使用
