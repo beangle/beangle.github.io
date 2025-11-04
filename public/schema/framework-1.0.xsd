@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns="http://beangle.github.io/schema/config"
+<xs:schema xmlns="http://beangle.github.io/schema/framework"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified"
-           targetNamespace="http://beangle.github.io/schema/config">
+           targetNamespace="http://beangle.github.io/schema/framework">
 
   <xs:element name="beangle">
     <xs:complexType>
       <xs:all>
+        <xs:element name="web" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="initializer">
+                <xs:complexType>
+                  <xs:attribute name="class" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name="ems" minOccurs="0">
           <xs:complexType>
             <xs:sequence>
