@@ -3,7 +3,7 @@ Boot Toolkit是一个轻量级瘦jar和war的启动器。
 
 ## 功能和原理
 他是个支持瘦jar包的启动工具。首先他会解析Jar包中的依赖文件(/META-INF/beangle/dependencies)，并通过CLASSPATH暴露出来，从而支持进行快速启动。
-这个依赖文件包含很多行，每行描述一个外部依赖，形式采用gav(group:artifact:version)格式，例如：
+这个依赖文件包含很多行，每行描述一个外部依赖，形式采用GAV(group:artifact:version)格式，例如：
 ```
 com.zaxxer:HikariCP:7.0.2
 org.slf4j:slf4j-api:2.0.17
@@ -48,6 +48,10 @@ ch.qos.logback:logback-core:1.5.20
   </configuration>
 </plugin>
 ```
+
+在工程的pom.xml中的plugins中添加这两个插件，并配置工程的入口类`com.yourcompany.project.MainClass`，这样在打包时就可以生成依赖文件。
+_⚠️如果是spring-boot项目需要禁用`spring-boot-maven-plugin`插件，这个插件默认会打出fat jar。_
+
 如果是War工程，需要配置maven-war-plugin，避免打包其他依赖到WEB-INF/lib中。
 ```xml
 <plugin>
@@ -61,7 +65,6 @@ ch.qos.logback:logback-core:1.5.20
   </configuration>
 </plugin>
 ```
-在工程的pom.xml中的plugins中添加这两个插件，并配置工程的入口类`com.yourcompany.project.MainClass`，这样在打包时就可以生成依赖文件。
 
 ## 二、Sbt工程中生成依赖文件
 
@@ -92,12 +95,12 @@ chmod +x launch.sh
 ./launch.sh -cp "/path/to/lib/*" /path/to/your/project.jar
 ./launch.sh -cp "/path/to/lib/*" -Dk1=v1 -Dk2=v2  /path/to/your/project.jar arg1 arg2
 ```
-这个工具还支持直接使用gav形式的描述，直接运行maven仓库中的jar包，例如
+这个工具还支持直接使用GAV形式的描述，直接运行maven仓库中的jar包，例如
 
 ```bash
 ./launch.sh org.beangle.sqlplus:beangle-sqlplus:0.0.46 db.xml
 ```
-## 四、启动war
+## 四、启动war包
 
 如果项目是个部署在tomcat中的war包，没有Main-Class的属性，日常运行的时候是直接放在容器中，不是可执行的jar包。
 那么可以使用工具包中的sas.sh脚本，直接运行该包。
