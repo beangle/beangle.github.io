@@ -27,6 +27,7 @@ export default defineConfig({
           { text: '📈Data', link: '/docs/data' },
           { text: '✳️Micdn', link: '/docs/micdn' },
           { text: '🎡Sas', link: '/docs/sas' },
+          { text: '🚀Boot', link: '/docs/boot' },
           { text: '⚙️Spring', link: '/docs/spring' },
           { text: '✨WebMVC', link: '/docs/webmvc' },
         ]

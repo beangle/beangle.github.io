@@ -56,7 +56,7 @@ org.hibernate:hibernate-ehcache:4.3.1.Final
         <plugin>
           <groupId>org.beangle.maven</groupId>
           <artifactId>beangle-maven-plugin</artifactId>
-          <version>0.3.23</version>
+          <version>0.3.32</version>
           <executions>
             <execution>
               <id>generate</id>
