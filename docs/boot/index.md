@@ -66,12 +66,12 @@ ch.qos.logback:logback-core:1.5.20
 ## 二、Sbt工程中生成依赖文件
 
 将如下代码片段放在工程的project/plugin.sbt文件中。
-```sbt
+```scala
 addSbtPlugin("org.beangle.build" % "sbt-beangle-build" % "0.0.15")
 ```
 
 然后在build.sbt文件中配置入口类，并激活BootPlugin。
-```sbt
+```scala
 Compile / packageBin / packageOptions +=
 Package.ManifestAttributes(java.util.jar.Attributes.Name.MAIN_CLASS -> "org.your.main.class.name")
 
@@ -124,6 +124,9 @@ chmod +x sas.sh
 curl -o resolve.sh http://beangle.github.io/scripts/boot/resolve.sh
 chmod +x resolve.sh
 
+#定制仓库，默认使用阿里云，现在改为华为云仓库
+export M2_REMOTE_REPO="https://repo.huaweicloud.com/repository/maven/"
+
 # 同shell中直接执行resolve.sh，他会暴露MAIN-CLASS and CLASSPATH
 source ./resolve.sh /path/to/myproject.jar
 # do some log rolling
@@ -135,4 +138,9 @@ java -Xmx1G $MAIN_CLASS
 ## 六、Windows平台支持
 
 需要相应的bat文件，进行运行。例如launch.sh对应的是launch.bat，resolve.sh对应的是resolve.bat(不过目前没有sas.bat支持）。
+例如：
 
+```bat
+curl -O http://beangle.github.io/scripts/boot/resolve.bat
+curl -O http://beangle.github.io/scripts/boot/launch.bat
+```
