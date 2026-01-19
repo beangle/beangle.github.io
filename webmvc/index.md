@@ -17,7 +17,7 @@ Beangle WebMVC 所提倡的惯例和用法包括：
 
 Beange WebMVC包括
 
-* [定义Action及其规则](/docs/webmvc/usage.html)
-* [WebUI标签](/docs/webmvc/tags.html)
-* [BeangleMVC内置标签](/docs/webmvc/tags.html)
+* [定义Action及其规则](/webmvc/usage.html)
+* [WebUI标签](/webmvc/tags.html)
+* [BeangleMVC内置标签](/webmvc/tags.html)
 

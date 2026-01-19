@@ -13,7 +13,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '🏠Home', link: '/' },
-      { text: '📚Documents', link: '/docs' }
+      { text: '📚Documents', link: '/projects' }
     ],
     outline: {
       label: '页面导航',
@@ -23,13 +23,13 @@ export default defineConfig({
       {
         text: 'Projects',
         items: [
-          { text: '🧰Commons', link: '/docs/commons/core' },
-          { text: '📈Data', link: '/docs/data' },
-          { text: '✳️Micdn', link: '/docs/micdn' },
-          { text: '🎡Sas', link: '/docs/sas' },
-          { text: '🚀Boot', link: '/docs/boot' },
-          { text: '⚙️Spring', link: '/docs/spring' },
-          { text: '✨WebMVC', link: '/docs/webmvc' },
+          { text: '🧰Commons', link: '/commons/core' },
+          { text: '📈Data', link: '/data' },
+          { text: '✳️Micdn', link: '/micdn' },
+          { text: '🎡Sas', link: '/sas' },
+          { text: '🚀Boot', link: '/boot' },
+          { text: '⚙️Spring', link: '/cdi' },
+          { text: '✨WebMVC', link: '/webmvc' },
         ]
       }
     ],

@@ -1,7 +1,7 @@
 # Beangle Sas Server
 Beangle Sas Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简单的内容，简化和便利war的运行。
 
-* [支持轻量级的war包运行](/docs/sas/lightwar.html)(如果内部WEB/lib的包都是maven仓库上可以下载的，这部分包可以省去,不用放在war中)
+* [支持轻量级的war包运行](/sas/lightwar.html)(如果内部WEB/lib的包都是maven仓库上可以下载的，这部分包可以省去,不用放在war中)
 * 支持快速创建多个server,而不用复制tomcat
 
 ## 1. 快速安装
