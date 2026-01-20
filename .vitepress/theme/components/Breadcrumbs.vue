@@ -52,7 +52,7 @@ const breadcrumbs = computed(() => {
 
 <style scoped>
 .VPBreadcrumbs {
-  padding: 4px 24px;
+  padding: 0px 16px 4px
   margin: 0;
   border-bottom: 1px solid var(--vp-c-divider);
   background-color: var(--vp-c-bg);
