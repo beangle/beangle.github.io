@@ -29,7 +29,7 @@
 /* 二级标题（h2）：优化层级感 */
 .vp-doc h2 {
   font-size: 1.4rem !important;
-  margin-top: 2rem !important;
+  margin-top: 1rem !important;
   margin-bottom: 1rem !important;
   padding-top: 1rem !important;
 }
@@ -87,10 +87,10 @@
 
 @media (min-width: 960px) {
   .VPContent .VPDoc {
-    padding: 24px 16px 0;
+    padding: 8px 16px 0;
   }
   .VPContent .VPDoc .content {
-    padding: 0 16px 64px;
+    padding: 16px 16px 64px;
   }
   .VPDoc .container .content .content-container {
     max-width: unset;
