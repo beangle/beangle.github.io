@@ -23,11 +23,6 @@ const breadcrumbs = computed(() => {
   const result = []
   let currentPath = ''
   
-  result.push({
-    text: '首页',
-    link: '/'
-  })
-  
   for (let i = 0; i < segments.length - 1; i++) {
     currentPath += segments[i]
     const text = segments[i].charAt(0).toUpperCase() + segments[i].slice(1)
@@ -40,11 +35,13 @@ const breadcrumbs = computed(() => {
   
   const fileName = segments[segments.length - 1].replace(/\.md$/, '')
   const pageTitle = frontmatter.value.title || fileName.charAt(0).toUpperCase() + fileName.slice(1)
-  
-  result.push({
-    text: pageTitle,
-    link: null
-  })
+  if(segments.length > 1){
+      console.log(result.length);
+      result.push({
+        text: pageTitle,
+        link: null
+      })
+  }
   
   return result
 })
