@@ -115,6 +115,12 @@
     --vp-sidebar-width: 240px; /* 小屏幕缩小导航宽度 */
     --vp-outline-width: 180px; /* 小屏幕缩小 outline 宽度 */
   }
+  .VPContent .VPDoc {
+    padding: 8px 16px 0;
+  }
+  .VPNavBar .wrapper .container {
+    margin: 0;
+  }
 }
 
 @media (max-width: 768px) {
