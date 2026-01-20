@@ -9,14 +9,10 @@ next: /micdn/index
 
 ## 1. 准备编译环境
 
-### Unbuntu 24.04 编译环境
+Unbuntu 24.04 编译环境
 
 ```shell
-# 1. 安装核心编译环境（解决 Scrt1.o、crti.o 错误，同时包含 lrt/ld/pthread/m 依赖）
-sudo apt install -y build-essential libc6-dev
-
-# 2. 安装额外缺失的专用库（lpq、lz 对应）
-sudo apt install -y libpq-dev zlib1g-dev
+sudo apt install -y build-essential libc6-dev libpq-dev zlib1g-dev zip
 ```
 
 ## 2. 下载MiCDN代码
