@@ -52,10 +52,8 @@ const breadcrumbs = computed(() => {
 
 <style scoped>
 .VPBreadcrumbs {
-  padding: 0px 16px 4px;
+  padding: 0px 32px;
   margin: 0;
-  border-bottom: 1px solid var(--vp-c-divider);
-  background-color: var(--vp-c-bg);
 }
 
 .breadcrumb-list {

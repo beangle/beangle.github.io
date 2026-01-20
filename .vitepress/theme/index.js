@@ -10,7 +10,7 @@ export default {
   },
   Layout() {
     return h(DefaultTheme.Layout, null, {
-      'doc-top': () => h(Breadcrumbs)
+      'nav-bar-content-before': () => h(Breadcrumbs)
     })
   }
 }
