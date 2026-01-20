@@ -11,6 +11,9 @@
   /* 右侧 outline 宽度（默认 200px，微调为 220px，避免挤压内容） */
   --vp-outline-width: 220px;
   --vp-layout-max-width: 100%;
+  /* 顶部导航栏高度（从默认 64px 调整为 48px） */
+  --vp-nav-height: 48px;
+  --vp-header-height: 48px;
 }
 
 /* 缩小页面左右默认边距（解决空白过多问题） */
