@@ -7,11 +7,11 @@
   <!-- Root element -->
   <xs:element name="micdn">
     <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="repo" type="repoType" />
-        <xs:element name="blob" type="blobType" />
-        <xs:element name="static" type="staticType" />
-        <xs:element name="www" type="wwwType" />
+      <xs:choice minOccurs="0" maxOccurs="4">
+        <xs:element name="repo" type="repoType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="blob" type="blobType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="static" type="staticType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="www" type="wwwType" minOccurs="0" maxOccurs="1" />
         <xs:any namespace="http://www.w3.org/2001/XInclude" processContents="lax" minOccurs="0" />
       </xs:choice>
     </xs:complexType>
