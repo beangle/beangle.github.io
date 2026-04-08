@@ -17,6 +17,14 @@
   <!-- Root element -->
   <xs:element name="micdn">
     <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="5">
+        <xs:element name="maven" type="mavenType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="npm" type="npmRepoType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="blob" type="blobType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="static" type="staticType" minOccurs="0" maxOccurs="1" />
+        <xs:element name="www" type="wwwType" minOccurs="0" maxOccurs="1" />
+        <xs:any namespace="http://www.w3.org/2001/XInclude" processContents="lax" minOccurs="0" />
+      </xs:choice>
       <xs:attribute name="listen" type="xs:string" default="127.0.0.1:8888" use="optional">
         <xs:annotation>
           <xs:documentation> 监听地址，格式 host:port，默认 127.0.0.1:8888 </xs:documentation>
@@ -42,14 +50,6 @@
           <xs:documentation> trace|debug|debugv|diagnostic|info|warn|error|critical|fatal </xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:choice minOccurs="0" maxOccurs="5">
-        <xs:element name="maven" type="mavenType" minOccurs="0" maxOccurs="1" />
-        <xs:element name="npm" type="npmRepoType" minOccurs="0" maxOccurs="1" />
-        <xs:element name="blob" type="blobType" minOccurs="0" maxOccurs="1" />
-        <xs:element name="static" type="staticType" minOccurs="0" maxOccurs="1" />
-        <xs:element name="www" type="wwwType" minOccurs="0" maxOccurs="1" />
-        <xs:any namespace="http://www.w3.org/2001/XInclude" processContents="lax" minOccurs="0" />
-      </xs:choice>
     </xs:complexType>
   </xs:element>
 
