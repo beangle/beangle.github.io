@@ -1,5 +1,14 @@
 import { defineConfig } from 'vitepress'
 
+function tablePlugin(md: any) {
+  const defaultRender = md.renderer.rules.table_open || function (tokens: any, idx: any, options: any, env: any, self: any) {
+    return self.renderToken(tokens, idx, options)
+  }
+  md.renderer.rules.table_open = function (tokens: any, idx: any, options: any, env: any, self: any) {
+    return '<table class="table-mini">'
+  }
+}
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "⚒️Beangle Software",
@@ -7,6 +16,9 @@ export default defineConfig({
   markdown:{
     toc:{
       level :[1,2,3],
+    },
+    config: (md) => {
+      md.use(tablePlugin)
     }
   },
   themeConfig: {
@@ -23,7 +35,7 @@ export default defineConfig({
       {
         text: 'Projects',
         items: [
-          { text: '🧰Commons', link: '/commons/core' },
+          { text: '🧰Commons', link: '/commons' },
           { text: '📈Data', link: '/data' },
           { text: '✳️Micdn', link: '/micdn' },
           { text: '🎡Sas', link: '/sas' },

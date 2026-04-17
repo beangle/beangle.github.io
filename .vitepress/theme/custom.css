@@ -88,6 +88,27 @@
   padding: 0.8rem !important;
 }
 
+/*自定义css*/
+table.table-mini{
+  width: 100% !important;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+table.table-mini thead,
+table.table-mini tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table.table-mini td,
+table.table-mini th {
+  box-sizing: border-box;
+  padding: 5px 5px !important;
+  word-wrap: break-word;
+}
+
 @media (min-width: 960px) {
   .VPContent .VPDoc {
     padding: 8px 16px 0;
