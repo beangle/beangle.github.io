@@ -89,24 +89,43 @@
 }
 
 /*自定义css*/
-table.table-mini{
+table.table-api{
   width: 100% !important;
   table-layout: fixed;
   border-collapse: collapse;
 }
 
-table.table-mini thead,
-table.table-mini tbody {
+table.table-api thead,
+table.table-api tbody {
   display: table;
   width: 100%;
   table-layout: fixed;
 }
 
-table.table-mini td,
-table.table-mini th {
+table.table-api td,
+table.table-api th {
   box-sizing: border-box;
   padding: 5px 5px !important;
   word-wrap: break-word;
+}
+
+/* 调整表格列宽：使用固定布局但设置最小宽度，让布局更灵活 */
+table.table-api th:nth-child(1),
+table.table-api td:nth-child(1) {
+  min-width: 120px; /* API 名称列最小宽度 */
+  width: 20%; /* 占20%宽度 */
+}
+
+table.table-api th:nth-child(2),
+table.table-api td:nth-child(2) {
+  min-width: 200px; /* 功能描述列最小宽度 */
+  width: 30%; /* 占30%宽度 */
+}
+
+table.table-api th:nth-child(3),
+table.table-api td:nth-child(3) {
+  min-width: 300px; /* 使用示例列最小宽度 */
+  width: 50%; /* 占50%宽度 */
 }
 
 @media (min-width: 960px) {

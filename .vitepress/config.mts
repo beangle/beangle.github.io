@@ -5,7 +5,7 @@ function tablePlugin(md: any) {
     return self.renderToken(tokens, idx, options)
   }
   md.renderer.rules.table_open = function (tokens: any, idx: any, options: any, env: any, self: any) {
-    return '<table class="table-mini">'
+    return '<table class="table-api">'
   }
 }
 
@@ -36,6 +36,7 @@ export default defineConfig({
         text: 'Projects',
         items: [
           { text: '🧰Commons', link: '/commons' },
+          { text: '🌐Web', link: '/web' },
           { text: '📈Data', link: '/data' },
           { text: '✳️Micdn', link: '/micdn' },
           { text: '🎡Sas', link: '/sas' },
