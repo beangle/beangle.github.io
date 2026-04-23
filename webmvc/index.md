@@ -1,8 +1,28 @@
-# WebMVC Index
+# Beangle WebMVC
 
-Beangle WebMVC 就是取代Struts或者SpringMVC这样类似的框架，他不仅仅定义了一些用法和惯例，还提供了简单有力的实现。 
+Beangle WebMVC 是一个基于 Scala 的 MVC 框架，提供了简洁有力的 Web 应用开发能力，可替代 Struts 或 SpringMVC 等框架。
 
-类似Struts和SpringMVC，该库所提倡的用法也是基于Command的。
+## 核心能力
+
+Beangle WebMVC 提供以下核心能力：
+
+- **基于 Command 的 MVC 架构**：采用命令模式，提供清晰的控制器结构
+- **注解支持**：通过注解配置 Action、参数绑定、视图等
+- **RESTful 支持**：提供 REST 风格的路由和请求处理
+- **参数绑定**：支持将请求参数自动绑定到方法参数
+- **Flash 参数**：支持跨请求的参数传递
+- **视图管理**：支持 Freemarker 等模板引擎，提供多种视图类型
+- **国际化**：支持多语言资源和本地化
+- **拦截器**：支持请求拦截和处理
+- **路由管理**：提供灵活的路由配置和映射
+- **静态资源**：支持静态资源的处理和管理
+- **CORS 支持**：支持跨域资源共享
+- **缓存控制**：支持响应缓存和结果缓存
+- **模块集结**：支持将多个模块的 Action、标签等整合在一起
+- **异常处理**：提供统一的异常处理机制
+- **配置管理**：支持灵活的配置和定制
+
+## 设计理念
 
 Beangle WebMVC 所提倡的惯例和用法包括：
 
@@ -15,9 +35,10 @@ Beangle WebMVC 所提倡的惯例和用法包括：
 * 应能支持参数绑定
 * 应能支持flash参数闪存
 
-Beange WebMVC包括
+## 文档组织
 
 * [定义Action及其规则](/webmvc/usage.html)
 * [WebUI标签](/webmvc/tags.html)
 * [BeangleMVC内置标签](/webmvc/tags.html)
+* [API 调用说明](/webmvc/api.html) 详细的API使用指南，帮助开发者快速上手Beangle WebMVC框架
 

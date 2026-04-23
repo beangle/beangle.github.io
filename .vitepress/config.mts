@@ -43,6 +43,8 @@ export default defineConfig({
           { text: '🚀Boot', link: '/boot' },
           { text: '⚙️Spring', link: '/cdi' },
           { text: '✨WebMVC', link: '/webmvc' },
+          { text: '🎨BUI', link: '/bui' },
+          { text: '🔔Notify', link: '/notify' },
         ]
       }
     ],
