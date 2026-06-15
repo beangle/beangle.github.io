@@ -25,7 +25,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '🏠Home', link: '/' },
-      { text: '📚Documents', link: '/projects' }
+      { text: '📚Projects', link: '/projects' }
     ],
     outline: {
       label: '页面导航',
@@ -33,18 +33,59 @@ export default defineConfig({
     },
     sidebar: [
       {
-        text: 'Projects',
+        text: '基础库',
         items: [
           { text: '🧰Commons', link: '/commons' },
-          { text: '🌐Web', link: '/web' },
-          { text: '📈Data', link: '/data' },
-          { text: '✳️Micdn', link: '/micdn' },
-          { text: '🎡Sas', link: '/sas' },
           { text: '🚀Boot', link: '/boot' },
-          { text: '⚙️Spring', link: '/cdi' },
+          { text: '⚙️Config', link: '/config' },
+          { text: '🫧CDI', link: '/cdi' },
+          { text: '🌐Web', link: '/web' }
+        ]
+      },
+      {
+        text: '数据层',
+        items: [
+          { text: '🗄️JDBC', link: '/jdbc' },
+          { text: '📈Data', link: '/data' },
+        ]
+      },
+      {
+        text: '工具组件',
+        items: [
+          { text: '⚡Cache', link: '/cache' },
+          { text: '📡Event', link: '/event' },
+          { text: '🔔Notify', link: '/notify' },
+          { text: '📝Template', link: '/template' },
+          { text: '📄Doc', link: '/doc' },
+          { text: '🔄Serializer', link: '/serializer' },
+          { text: '⏰Cron', link: '/cron' },
+          { text: '📤Transfer', link: '/transfer' },
+        ]
+      },
+      {
+        text: 'Web框架',
+        items: [
           { text: '✨WebMVC', link: '/webmvc' },
           { text: '🎨BUI', link: '/bui' },
-          { text: '🔔Notify', link: '/notify' },
+          { text: '🐚She', link: '/she' },
+        ]
+      },
+      {
+        text: '安全',
+        items: [
+          { text: '🔐Security', link: '/security' },
+          { text: '🪪IDS', link: '/ids' },
+          { text: '📜CA', link: '/ca' },
+        ]
+      },
+      {
+        text: '独立服务',
+        items: [
+          { text: '🎡Sas', link: '/sas' },
+          { text: '🔧Otk', link: '/otk' },
+          { text: '✳️Micdn', link: '/micdn' },
+          { text: '🏢EMS', link: '/ems' },
+          { text: '📊SQLPlus', link: '/sqlplus' },
         ]
       }
     ],

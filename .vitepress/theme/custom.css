@@ -177,3 +177,20 @@ table.table-api td:nth-child(3) {
 body{
   font-size: 14px;
 }
+
+/* 导航分组间距调整 */
+.VPSidebarGroup {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 导航分组标题间距 */
+.VPSidebarGroup > button {
+  margin-bottom: 0.25rem !important;
+}
+
+/* 导航菜单项间距 */
+.VPSidebarItem {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
