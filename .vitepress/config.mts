@@ -87,6 +87,12 @@ export default defineConfig({
           { text: '🏢EMS', link: '/ems' },
           { text: '📊SQLPlus', link: '/sqlplus' },
         ]
+      },
+      {
+        text: '构建工具',
+        items: [
+          { text: '🔨Build', link: '/build' },
+        ]
       }
     ],
 
