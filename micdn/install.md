@@ -45,7 +45,7 @@ apt install -f
 <?xml version="1.0" encoding="UTF-8"?>
 <micdn xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xi="http://www.w3.org/2001/XInclude"
-  xsi:noNamespaceSchemaLocation="http://beangle.github.io/schema/micdn-1.0.0.xsd"
+  xsi:noNamespaceSchemaLocation="http://beangle.github.io/schema/micdn-1.1.0.xsd"
   listen="0.0.0.0:8888"
   log-file="/var/log/micdn/micdn.log"
   log-level="info">
@@ -206,7 +206,7 @@ MiCDN 的文件对象存储功能**支持扩展属性**（Extended Attributes）
 创建 `/etc/micdn/blob.xml` 文件：
 
 ```xml
-<blob base="/var/lib/micdn/blob" maxSize="50M" endpoint="/blob" bucket-resolve-style="host">
+<blob base="/var/lib/micdn/blob" max-size="50M" endpoint="/blob" bucket-resolve-style="host">
   <bucket name="local" key="your-private-long-key" />
 </blob>
 ```

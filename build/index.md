@@ -290,7 +290,7 @@ sbt "warDiff 1.0.0 1.0.1"    # 生成热升级增量补丁
 
 手动启用，把 SNAPSHOT 版 war/jar 打包为带时间戳的文件名，并以 HTTP PUT 上传到
 [micdn](https://github.com/beangle/micdn) 的 `/maven` 发布端点（需在该实例的 `micdn.xml` 里
-声明 `<publish token="…"/>`），便于开发期部署联调。正式版与 SNAPSHOT 共用 `/maven` 一个入口。
+声明 `<auth publish-key="…"/>`），便于开发期部署联调。正式版与 SNAPSHOT 共用 `/maven` 一个入口。
 
 | 键 | 类型 | 说明 |
 |----|------|------|
