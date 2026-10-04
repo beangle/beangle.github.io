@@ -11,8 +11,8 @@ hero:
       text: 🧰 Commons
       link: /commons
     - theme: alt
-      text: 🎡 Sas Server
-      link: /sas
+      text: 🎡 Bas Server
+      link: /bas
     - theme: alt
       text: 🫘 Spring Binding
       link: /cdi
@@ -40,7 +40,7 @@ features:
     details: 提供轻量级任务调度功能，基于JDK ScheduledExecutorService，支持虚拟线程
   - title: <a href='/config'>⚙️ Config<br>Beangle Config</a>
     details: 提供统一的配置加载和管理功能，支持多配置源和类型安全访问
-  - title: <a href='/sas'>🎡 Sas Server<br>Beangle Sas Server</a>
+  - title: <a href='/bas'>🎡 Bas Server<br>Beangle Bas Server</a>
     details: 运行轻量级war包，提供简化配置和便利部署的能力，支持集群运行
   - title: <a href='/web'>🌐 Web<br>Beangle Web</a>
     details: 提供HTTP处理、资源管理、文件上传等Web相关工具类和功能
@@ -58,8 +58,8 @@ features:
     details: 提供Shell扩展框架，包括Web MVC支持和Hibernate集成
   - title: <a href='/micdn'>✳️ Micdn<br>Beangle Micdn</a>
     details: 部署简易的CDN服务器，提供Maven/NPM镜像等功能
-  - title: <a href='/boot'>🚀 Boot<br>Beangle Boot</a>
-    details: 提供应用启动和部署相关的工具，支持多种运行引擎
+  - title: <a href='/jstart'>🚀 Jstart<br>Beangle Jstart</a>
+    details: 用 D 语言实现的轻量级 Java 工件启动器，解析包内依赖清单并按需下载后拉起应用
   - title: <a href='/cdi'>🫘 CDI<br>Beangle CDI</a>
     details: 提供容器支持，集成Spring、Hibernate等框架，简化企业应用开发
 ---

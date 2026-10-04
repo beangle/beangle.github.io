@@ -1,34 +1,24 @@
 # 轻量级war包的生成和部署
 
-Beangle Sas Server支持war包声明依赖项，容器加载的方式，从而降低war包体积的做法。
+Beangle Bas Server支持war包声明依赖项、由容器加载的方式，从而降低war包体积的做法。
 
 ## 1. 手工制作轻量级war包
 每个应用依赖的包和其他应用之间多少有些重复，例如使用了Struts2,Log4j等第三方开源的包。这些包通常都可以在maven仓库上可以下到。
-因此可以这些包从war中排除调，在war运行的时候，tomcat服务器会下载到本地缓存中，可以在各个应用之间共用。
+因此可以这些包从war中排除调，在war运行的时候，Bas Server会下载到本地缓存中，可以在各个应用之间共用。
 
-* 增加container.dependencies
+* 增加依赖声明文件
 
-在war的WEB-INF/classes/META-INF/目录下建立一个container.dependencies文件，内部可以使用
+在war的`WEB-INF/classes/META-INF/beangle/dependencies`文件（普通jar为`META-INF/beangle/dependencies`）中声明依赖，内部可以使用
 ```
 #groupId:artifactId:version的格式
 org.hibernate:hibernate-core:4.3.1.Final
 org.hibernate:hibernate-ehcache:4.3.1.Final
 ```
+
 * 清理war包
 
-这包中的WEB/lib中上述jar文件删除，再将war包放到webapps中即可。
-
-* 更改Context定义
-
-在youcontext.xml或者server.xml中的Context定义中，添加
-
-```xml
-<Loader className="org.apache.catalina.loader.RepositoryLoader"/>
-```
-其中cacheLayout表示本地缓存的风格，支持maven2和ivy2。可以补充cacheBase属性，设置本地缓存的位置(例如/opt/maven/repository)
-
-    默认使用maven2，目录默认为~/.m2/repository.
-    当风格为ivy2时，默认为~/.ivy2/cache
+这包中的WEB/lib中上述jar文件删除，再将war包放到webapps中即可。Bas Server启动时会由引擎的
+`DependencyClassLoader`读取该声明文件，把声明的依赖解析到本地maven仓库后加载，无需手工配置Context的Loader。
 
 ## 2.使用maven制作轻量级war
 
@@ -60,9 +50,9 @@ org.hibernate:hibernate-ehcache:4.3.1.Final
           <executions>
             <execution>
               <id>generate</id>
-              <phase>prepare-package</phase>
+              <phase>compile</phase>
               <goals>
-                <goal>sas</goal>
+                <goal>dependencies</goal>
               </goals>
             </execution>
           </executions>
@@ -81,4 +71,4 @@ org.hibernate:hibernate-ehcache:4.3.1.Final
     </build>
 ```
 
-直接运行mvn clean install即可将自动生成container.dependencies，并打到包中。
+直接运行mvn clean install即可将自动生成依赖声明文件，并打到包中。

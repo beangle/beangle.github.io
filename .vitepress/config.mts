@@ -36,7 +36,7 @@ export default defineConfig({
         text: '基础库',
         items: [
           { text: '🧰Commons', link: '/commons' },
-          { text: '🚀Boot', link: '/boot' },
+          { text: '🚀Jstart', link: '/jstart' },
           { text: '⚙️Config', link: '/config' },
           { text: '🫧CDI', link: '/cdi' },
           { text: '🌐Web', link: '/web' }
@@ -81,7 +81,7 @@ export default defineConfig({
       {
         text: '独立服务',
         items: [
-          { text: '🎡Sas', link: '/sas' },
+          { text: '🎡Bas', link: '/bas' },
           { text: '🔧Otk', link: '/otk' },
           { text: '✳️Micdn', link: '/micdn' },
           { text: '🏢EMS', link: '/ems' },

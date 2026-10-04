@@ -111,7 +111,7 @@ POM 内容与 `publish` 完全相同（同样应用 `pomPostProcess`、`pomExtra
 
 ## BootPlugin 运行时依赖元数据
 
-自动启用。为 [Beangle Boot](/boot/index.html) 一键启动生成运行时依赖清单：
+自动启用。为 [jstart](/jstart/index.html) 一键启动生成运行时依赖清单：
 
 | 任务 | 说明 |
 |------|------|
@@ -329,7 +329,7 @@ classpath，不定义任务；应用自行通过 beangle-sas 引擎 API 启动 U
   在 `src/main/resources` 放置 `meta-registrars.txt`、`aot-registrars.txt`、`beangle.xml`，
   由终端项目统一聚合。
 - **Web 应用项目**：显式启用 `WarPlugin`，依赖清单自动嵌入
-  `WEB-INF/classes/META-INF/beangle/dependencies`，可用 [Beangle Boot](/boot/index.html) 一键启动。
+  `WEB-INF/classes/META-INF/beangle/dependencies`，可用 [jstart](/jstart/index.html) 一键启动。
 - **GraalVM native-image**：终端项目显式启用 `AotPlugin`（配合 `MetaPlugin`、`ProxyPlugin`），
   再用 `NativeImagePlugin` 链接、打包 `tar.gz` 并发布整包或增量补丁。
 - **ORM 项目**：OrmPlugin 生成多数据库建表 DDL，DdlPlugin 生成 SQL 报告与迁移脚本。

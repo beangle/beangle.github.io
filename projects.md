@@ -4,7 +4,7 @@ Beangle立足企业软件开发，提供敏捷、基于约定(Convention Over Co
 
 ## 项目列表
 
-* [Boot](/boot/index.html) 提供应用启动和部署相关的工具
+* [Jstart](/jstart/index.html) 用 D 语言实现的轻量级 Java 工件启动器，解析依赖清单并按需下载后拉起应用
 * [BUI](/bui/index.html) 提供基于Bootstrap的前端UI框架，包含丰富的标签和组件
 * [Build](/build/index.html) 提供各模块共用的sbt构建插件集（格式检查、打包、DDL、原生镜像等）
 * [Cache](/cache/index.html) 提供统一的缓存接口和多种缓存实现
@@ -17,7 +17,7 @@ Beangle立足企业软件开发，提供敏捷、基于约定(Convention Over Co
 * [Micdn](/micdn/index.html) 部署简易的cdn
 * [Notify](/notify/index.html) 提供邮件、短信等多种通知方式，支持异步发送和消息队列
 * [Otk](/otk/index.html) 提供在线工具包，包括验证码、二维码、短链接等工具
-* [Sas](/sas/index.html) 提供简化配置和便利部署的能力
+* [Bas](/bas/index.html) 在 Tomcat 基础上提供简化配置和便利部署的能力
 * [Security](/security/index.html) 提供认证、授权、会话管理等核心安全功能
 * [Serializer](/serializer/index.html) 提供JSON、XML、CSV、Protobuf等多种格式的序列化功能
 * [She](/she/index.html) 提供Shell扩展框架，包括Web MVC支持和Hibernate集成
@@ -34,7 +34,7 @@ Beangle立足企业软件开发，提供敏捷、基于约定(Convention Over Co
 
 ## 依赖关系
 
-Beangle 项目之间存在清晰的依赖关系，底层基础模块支撑上层应用模块。以下依赖图主要展示核心模块之间的关系，独立服务（Otk、Micdn）和应用服务器（Sas）未包含在内。
+Beangle 项目之间存在清晰的依赖关系，底层基础模块支撑上层应用模块。以下依赖图主要展示核心模块之间的关系，独立服务（Otk、Micdn、Jstart）和应用服务器（Bas）未包含在内。
 
 ### 模块依赖关系图
 
@@ -56,7 +56,7 @@ Beangle 项目之间存在清晰的依赖关系，底层基础模块支撑上层
 ┌────────────────────────┐           ┌────────────────────────┐     ┌────────────────────────┐
 │    工具层 (Tools)      │           │     数据层 (Data)       │     │    基础层 (Foundation) │
 │  ┌─────────────────┐   │           │  ┌─────────────────┐   │     │  ┌─────────────────┐   │
-│  │ Cache  Event    │   │           │  │    JDBC         │   │     │  │   Boot         │   │
+│  │ Cache  Event    │   │           │  │    JDBC         │   │     │  │                │   │
 │  │ Notify Template │   │           │  │    Data         │   │     │  │   Web          │   │
 │  │ Doc   Serializer│   │           │  └─────────────────┘   │     │  │   Config       │   │
 │  │ Cron  Transfer  │   │           └────────────────────────┘     │  │   CDI          │   │
@@ -84,7 +84,6 @@ Beangle 项目之间存在清晰的依赖关系，底层基础模块支撑上层
 | 模块 | 功能描述 | 依赖 |
 |------|---------|------|
 | **Commons** | 字符串处理、集合操作、依赖注入、反射、CSV处理、安全加密 | 无 |
-| **Boot** | 应用启动和部署相关工具 | Commons |
 | **Web** | HTTP处理、资源管理、Servlet集成 | Commons |
 | **Config** | 统一配置加载和管理功能 | Commons |
 | **CDI** | Container支持，集成Spring、Hibernate | Commons |
@@ -145,7 +144,7 @@ Beangle 项目之间存在清晰的依赖关系，底层基础模块支撑上层
 
 | 模块 | 功能描述 | 依赖 |
 |------|---------|------|
-| **Sas** | 应用服务器，简化配置和便利部署 | Commons、Web |
+| **Bas** | 应用服务器，简化配置和便利部署 | Commons、Web |
 
 ---
 
@@ -155,6 +154,7 @@ Beangle 项目之间存在清晰的依赖关系，底层基础模块支撑上层
 
 | 模块 | 功能描述 | 依赖 |
 |------|---------|------|
+| **Jstart** | 轻量级 Java 工件启动器（D 语言原生实现） | 无 |
 | **Otk** | 在线工具包，包括验证码、二维码、短链接等 | Commons、Security |
 | **Micdn** | 简易CDN部署 | Commons |
 | **EMS** | 企业系统集成平台，提供用户管理、安全认证、权限控制 | Commons、Security、WebMVC、Data、Cache |
@@ -165,8 +165,7 @@ Beangle 项目之间存在清晰的依赖关系，底层基础模块支撑上层
 
 ```
 Commons (基础)
-  ├── Boot
-  ├── Web ────────► WebMVC ──┬──► Sas
+  ├── Web ────────► WebMVC ──┬──► Bas
   │                └───────► She │
   ├── Config                   │
   ├── CDI                      │
@@ -188,7 +187,7 @@ Commons (基础)
 | 模块 | 依赖 Commons 版本 | 说明 |
 |------|-----------------|------|
 | Commons | - | 核心基础库 |
-| Boot | 6.0.0+ | 启动工具 |
+| Jstart | - | 独立原生工具，不依赖 Commons |
 | Web | 6.1.0+ | Web基础 |
 | Config | 6.0.0+ | 配置管理 |
 | CDI | 6.0.0+ | 容器集成 |
@@ -206,7 +205,7 @@ Commons (基础)
 | WebMVC | 6.1.1+ | Web MVC |
 | BUI | 6.0.0+ | UI框架 |
 | She | 6.0.0+ | Shell扩展 |
-| Sas | 6.0.0+ | 应用服务器 |
+| Bas | 6.0.0+ | 应用服务器 |
 | Otk | 6.0.0+ | 在线工具 |
 | Micdn | 6.0.0+ | CDN服务 |
 | EMS | 6.0.0+ | 企业系统集成平台 |
@@ -215,9 +214,9 @@ Commons (基础)
 
 ## 独立服务与平台介绍
 
-### Sas - 应用服务器
+### Bas - 应用服务器
 
-**Sas**（Simple Application Server）是一个轻量级的 Java 应用服务器，专为 Beangle 应用设计：
+**Bas** 是一个轻量级的 Java 应用服务器，专为 Beangle 应用设计：
 
 **核心特性：**
 

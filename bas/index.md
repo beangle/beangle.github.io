@@ -1,23 +1,23 @@
-# Beangle Sas Server
-Beangle Sas Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简单的内容，简化和便利war的运行。
+# Beangle Bas Server
+Beangle Bas Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简单的内容，简化和便利war的运行。
 
-* [支持轻量级的war包运行](/sas/lightwar.html)(如果内部WEB/lib的包都是maven仓库上可以下载的，这部分包可以省去,不用放在war中)
+* [支持轻量级的war包运行](/bas/lightwar.html)(如果内部WEB/lib的包都是maven仓库上可以下载的，这部分包可以省去,不用放在war中)
 * 支持快速创建多个server,而不用复制tomcat
 
 ## 1. 快速安装
 
 ```shell
 # 先安装 basctl（控制面）与 jstart（构件解析/启动），见各自项目
-basctl init /opt/sas     # 写入 /opt/sas/bin/*.sh，并建 conf/
-cd /opt/sas && ./bin/start.sh all
+basctl init /opt/bas     # 写入 /opt/bas/bin/*.sh，并建 conf/
+cd /opt/bas && ./bin/start.sh all
 ```
 
-## 2. sas目录结构
+## 2. bas目录结构
 
-Beangle Sas Server有特别的目录结构:
+Beangle Bas Server有特别的目录结构:
 ```
   |-- bin
-  |   |-- sas.sh
+  |   |-- bas.sh
   |   |-- start.sh(启动服务)
   |   `-- stop.sh(停止服务)
   |-- conf(配置文件)
@@ -27,9 +27,9 @@ Beangle Sas Server有特别的目录结构:
   `-- webapps(放置war包,尤其是SNAPSHOT版本的)
 ```
 
-新的war包放置在webapps.在conf中配置一个server.xml。Beangle SAS server没有采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。
+新的war包放置在webapps.在conf中配置一个server.xml。Beangle Bas Server没有采用[Engine]/[Hostname]/Context.xml的方式配置应用，而是新建立一个格式的文件，支持同时管理多个tomcat节点。
 
-## 3. sas 示例
+## 3. bas 示例
 现有两台web服务器(web1,web2)，一台负载均衡服务器(proxy)的构成系统的拓扑结构。两台web分别各自部署2个应用，其中web1上部署app1,app2,web2上部署app3,app4。
 另外有一个应用app_index同时部署在web1,web2上做高可用。
 
@@ -53,7 +53,7 @@ Beangle Sas Server有特别的目录结构:
 <?xml version='1.0' encoding='utf-8'?>
 <bas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:noNamespaceSchemaLocation="http://beangle.github.io/schema/bas-1.0.0.xsd"
-     version="0.10.1">
+     version="0.14.0">
   <!--从这里下载webapp的各类依赖性，如果涉及到没有开源的包，可以改为自己的伺服-->
   <repository remote="maven.aliyun.com/nexus/content/groups/public"/>
   <hosts>
@@ -99,7 +99,7 @@ Beangle Sas Server有特别的目录结构:
 
   <webapps>
     <!--gav 是group-artifact-version的缩写，表示该组件在maven仓库的信息-->
-    <!--maven仓库上没有的war包，可以省去该属性，转而写成doc-base="${sas.home}/webapps/app1.war"-->
+    <!--maven仓库上没有的war包，可以省去该属性，转而写成doc-base="${bas.home}/webapps/app1.war"-->
     <webapp name="app1"  uri="gav://org.group:group-app1:0.x.x" run-at="group1" path="/app1" />
     <webapp name="app2"  uri="gav://org.group:group-app2:0.x.x" run-at="group1" path="/app2"/>
     <webapp name="app3"  uri="gav://org.group:group-app3:0.x.x" run-at="farm2" path="/app3"/>
@@ -116,39 +116,28 @@ Beangle Sas Server有特别的目录结构:
 </bas>
 ```
 
-## 3. sas 日常使用
+## 4. 日常使用
 
-sas安装完成后，只需要更改server.xml文件即可。
+bas安装完成后，只需要更改server.xml文件即可。
 
-### 3.1 解析war
+### 4.1 解析war
 
 在日常war包版本号更新后，需要完成war包下载，以及解析轻量级war包的依赖，然后再运行。通常这个操作依赖于网络带宽，长时间停止服务可能影响生产环境。
 可以先解析war包，然后再重启服务。
 
 ```shell
-$ bin/sas.sh resolve
+$ bin/bas.sh resolve
 ```
 
-解析过程中sas会下载war包，如果发现war有声明的依赖项，也会下载。下载目录为maven的本地仓库 `~/.m2/repository`。除此之外还会下载jar/war对应的sha1摘要信息。
+解析过程中bas会下载war包，如果发现war有声明的依赖项，也会下载。下载目录为maven的本地仓库 `~/.m2/repository`。除此之外还会下载jar/war对应的sha1摘要信息。
 一旦发现sha1信息和jar包不符，将会删除jar和sha1。
 
-### 3.2 生成代理配置
+### 4.2 查看状态和起停服务
 
-不论是采用haproxy抑或是enginx,都可以在server.xml中声明后，采用如下命令生成:
-```shell
-$ bin/sas.sh proxy
-```
-
-该命令会在conf目录下生成haproxy.cfg或者enginx.conf文件。
-
-***注意***:该文件需要使用root账户拷贝到haproxy的对应目录下，然后重启haproxy方能生效。
-
-### 3.3 查看状态和起停服务
-
-查看sas接管的服务可以通过
+查看bas接管的服务可以通过
 
 ```shell
-$ bin/sas.sh status
+$ bin/bas.sh status
 ```
 
 查看哪些服务是启动的，以及版本号。
@@ -174,7 +163,7 @@ $ bin/stop.sh all
 $ bin/start.sh all
 ```
 
-### 3.4 查看日志
+### 4.3 查看日志
 
 查看日志farm3.server1
 ```shell
@@ -182,7 +171,7 @@ $ tail -f logs/farm3.server1/console.out
 ```
 每次启动启动farm3.server1,都会创建一个新的console.out。历史日志在logs/archive下可以找到。
 
-### 3.5 更新tomcat
+### 4.4 更新tomcat
 
 当tomcat有了新版本时，可以通过修改server.xml中的其引擎version属性,之后重启应用直接更新
 ```xml
@@ -190,11 +179,12 @@ $ tail -f logs/farm3.server1/console.out
 </engine>
 ```
 
-## 4 更新sas
+## 5 升级
 
-0.3.x 支持tomcat 8.0到8.5之间的版本，0.4.x之后支持tomcat9.0以上系列的版本.0.8.1之后的版本支持tomcat 10
-发现新版本的sas后，需要执行更新命令：
+不再有独立的 bas 发行包：控制脚本随 `basctl` 发布，升级 `basctl` 后执行以下命令刷新 `bin/*.sh`：
+
 ```shell
-$ bin/sas.sh update new_version
+$ basctl init --force /opt/bas
 ```
-然后更改conf/server.xml中的`<bas version="old_version">`节点中的version,将其改为new_version
+
+引擎版本在 `conf/server.xml` 的 `<bas version="...">` 与各 `<engine version="...">` 中声明，重启后生效。
