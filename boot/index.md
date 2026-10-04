@@ -68,19 +68,23 @@ _⚠️如果是spring-boot项目需要禁用`spring-boot-maven-plugin`插件，
 
 ## 二、Sbt工程中生成依赖文件
 
-将如下代码片段放在工程的project/plugin.sbt文件中。
+在工程的`project/plugins.sbt`中引入Beangle构建插件：
 ```scala
-addSbtPlugin("org.beangle.build" % "sbt-beangle-build" % "0.0.15")
+addSbtPlugin("org.beangle.build" % "sbt-beangle-build" % "0.1.10")
 ```
-
-然后在build.sbt文件中配置入口类，并激活BootPlugin。
+并在`project/build.properties`中把sbt升级到2.x：
+```properties
+sbt.version=2.0.9
+```
+插件的BootPlugin是自动启用的，编译后会在`META-INF/beangle/dependencies`生成依赖文件，并随jar
+自动打包，无需在build.sbt中做额外配置。如果这个jar需要直接启动，则再声明入口类：
 ```scala
 Compile / packageBin / packageOptions +=
 Package.ManifestAttributes(java.util.jar.Attributes.Name.MAIN_CLASS -> "org.your.main.class.name")
-
-Compile / compile := (Compile / compile).dependsOn(BootPlugin.generateDependenciesTask).value
 ```
-之后执行`sbt package` 将会产生`dependencies`文件。
+之后执行`sbt package`，打包结果中就会带上依赖文件。也可以单独执行`sbt bootDependencies`
+生成该文件（写入`target/scala-*/resource_managed/main/META-INF/beangle/dependencies`），
+或执行`sbt bootRepo`在`target/repository`组装一份Maven布局的离线仓库。更多说明见[Beangle Build](/build/index.html)。
 
 ## 三、启动jar包
 

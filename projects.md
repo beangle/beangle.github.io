@@ -6,6 +6,7 @@ Beangle立足企业软件开发，提供敏捷、基于约定(Convention Over Co
 
 * [Boot](/boot/index.html) 提供应用启动和部署相关的工具
 * [BUI](/bui/index.html) 提供基于Bootstrap的前端UI框架，包含丰富的标签和组件
+* [Build](/build/index.html) 提供各模块共用的sbt构建插件集（格式检查、打包、DDL、原生镜像等）
 * [Cache](/cache/index.html) 提供统一的缓存接口和多种缓存实现
 * [Commons](/commons/index.html) 提供依赖注入，bean，反射，CSV、字符串处理，web通用基础类
 * [Config](/config/index.html) 提供统一的配置加载和管理功能

@@ -24,6 +24,8 @@ features:
     details: 提供认证、授权、会话管理等核心安全功能，支持JWT、OAuth等多种认证方式
   - title: <a href='/jdbc'>🗄️ JDBC<br>Beangle JDBC</a>
     details: 提供数据库连接管理、SQL执行、元数据查询等功能，支持多种数据库方言
+  - title: <a href='/build'>🔨 Build<br>Beangle Build</a>
+    details: 各模块共用的sbt构建插件集，提供格式检查、打包、DDL生成、原生镜像等构建约定
   - title: <a href='/cache'>⚡ Cache<br>Beangle Cache</a>
     details: 提供统一的缓存接口和多种实现，支持Caffeine、Redis、Ehcache等缓存后端
   - title: <a href='/event'>📡 Event<br>Beangle Event</a>
