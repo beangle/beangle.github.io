@@ -355,10 +355,13 @@ Stream(new File("/tmp/path/to/your/pic.gif","我的logo"))
 ```
 该文件需要浏览器缓存，可以增加过期时间设置
 ```scala
-import org.beangle.webmvc.api.util.CacheControl
-CacheControl.expiresAfter(4)//4天后过期
+import java.time.Duration
+import org.beangle.webmvc.util.CacheControl
+CacheControl.expiresAfter(Duration.ofDays(4))//4天后过期
 Stream(new File("/tmp/path/to/your/pic.gif","我的logo"))
 ```
+缺省为 `private`，即只允许浏览器私有缓存保存，适用于随用户身份变化的响应。
+与用户无关的图片允许 CDN 等共享缓存保存时，用 `expiresAfter(Duration.ofDays(4), shareable = true)`。
 如果支持javascript跨域访问该文件，则需要在profile中添加跨域访问支持：
 
 ```xml
