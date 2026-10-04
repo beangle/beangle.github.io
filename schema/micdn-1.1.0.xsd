@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  elementFormDefault="qualified"
+  version="1.1.0">
+
+  <!-- www doc 名：不以 / 开头或结尾，段间用 /（如 manual、a/b） -->
+  <xs:simpleType name="docNameType">
+    <xs:annotation>
+      <xs:documentation> 不以 / 开头或结尾；可含多级路径如 a/b </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[^/]+(/[^/]+)*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- HTTP 路径前缀：以 / 开头且不以 / 结尾（如 /manual、/maven），不允许空串或 / -->
+  <xs:simpleType name="endpointType">
+    <xs:annotation>
+      <xs:documentation> 以 / 开头且不以 / 结尾 </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="/.*[^/]"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Root：maven/npm/native/blob/static/www/auth 彼此无顺序要求，各至多一次（xs:all）。xi:include 在 XSD 1.0 中不能与 all 混排，故列于前段；若需与服务块交错请依赖运行时。readXml 展开后由程序校验各服务元素至多一次。 -->
+  <xs:element name="micdn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:any namespace="http://www.w3.org/2001/XInclude" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        <xs:all>
+          <xs:element name="maven" type="mavenType" minOccurs="0" maxOccurs="1" />
+          <xs:element name="npm" type="npmRepoType" minOccurs="0" maxOccurs="1" />
+          <xs:element name="native" type="nativeType" minOccurs="0" maxOccurs="1" />
+          <xs:element name="blob" type="blobType" minOccurs="0" maxOccurs="1" />
+          <xs:element name="static" type="staticType" minOccurs="0" maxOccurs="1" />
+          <xs:element name="www" type="wwwType" minOccurs="0" maxOccurs="1" />
+          <xs:element name="auth" type="authType" minOccurs="0" maxOccurs="1" />
+        </xs:all>
+      </xs:sequence>
+      <xs:attribute name="listen" type="xs:string" default="127.0.0.1:8888" use="optional">
+        <xs:annotation>
+          <xs:documentation> 监听地址，格式 host:port，默认 127.0.0.1:8888 </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="remote" type="xs:anyURI" use="optional">
+        <xs:annotation>
+          <xs:documentation> 远程配置 URL，加载时会下载并覆盖本地 micdn.xml </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="home" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation> 根目录，空表示 xml 文件所在目录，~ 表示用户主目录 </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="log-file" type="xs:string" default="console" use="optional">
+        <xs:annotation>
+          <xs:documentation> console（默认，大小写不敏感）仅控制台；否则为日志文件路径（FHS 常见 /var/log/micdn/micdn.log）。二者互斥，行格式固定 </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="log-level" type="xs:string" default="info" use="optional">
+        <xs:annotation>
+          <xs:documentation> trace|debug|debugv|diagnostic|info|warn|error|critical|fatal </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Reusable types for jar, zip, dir -->
+  <xs:complexType name="jarType">
+    <xs:annotation>
+      <xs:documentation> jar supports automatic parsing of META-INF/resources directory in jar file.
+        If groupId is org.webjars, it will parse resources from META-INF/resources/webjars </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="gav" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation> Maven GAV coordinates (groupId:artifactId:version) </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="dir" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation> jar 内子目录路径（不能以 / 开头），默认 META-INF/resources </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="zipType">
+    <xs:attribute name="file" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation> Path to zip file </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="dir" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation> zip 包内子目录路径（相对路径，不能以 / 开头，如 sub/dir）</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="dirType">
+    <xs:attribute name="location" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation> Directory path </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- bundleType for static：不支持 zip（仅 www doc 支持）；同一 bundle 内不得同时出现 dir 与 jar/npm -->
+  <xs:complexType name="bundleType">
+    <xs:annotation>
+      <xs:documentation> 同一 bundle 内 &lt;dir&gt; 与 &lt;jar&gt;/&lt;npm&gt; 不可混用（解析期校验）。 </xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="jar" type="jarType" />
+      <xs:element name="npm" type="npmType" />
+      <xs:element name="dir" type="dirType" />
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="base" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <!-- blobBucketType：桶目录名（磁盘 base/name/…）与 Bearer/S3 密钥 -->
+  <xs:complexType name="blobBucketType">
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation> 桶名，对应磁盘子目录，不含 / </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="key" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation> 与 bucket key 一致：上传/删除用 Bearer；下载另可用 ?token=sha1hex(uri+key+t)&amp;t=yyyyMMddTHHmmss（UTC）。S3：Access Key 为 micdn </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="publicImages" type="xs:boolean" use="optional" default="true">
+      <xs:annotation>
+        <xs:documentation> 为 true（默认）时，GET 图片类对象可在 Referer 与 Host 主机名一致时免 Bearer/签名下载；为 false 时图片也必须带 Bearer 或有效 ?token=&amp;t=。解析时未写该属性与 true 等价。 </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- npmType: package spec @scope/package@version, optional dir (default dist) -->
+  <xs:complexType name="npmType">
+    <xs:annotation>
+      <xs:documentation> NPM 包，格式为 @scope/package@version 或 package@version，解压后取包内 dir 目录（默认 dist） </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="package" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation> NPM 包规格，格式为 @scope/package@version 或 package@version </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="dir" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation> tgz 解压后取包内的子目录（不能以 / 开头），默认 dist </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- docType for www：npm / zip 二选一（属性）；inner 仅用于 npm/zip 包内子目录 -->
+  <xs:complexType name="docType">
+    <xs:annotation>
+      <xs:documentation> name 必填；npm、zip 二属性恰填其一（解析期校验）。inner、try-file 可选；npm 默认 dist，zip 默认空。 </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="docNameType" use="required">
+      <xs:annotation>
+        <xs:documentation> doc 路径名，不以 / 开头（如 manual、a/b） </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="npm" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation> NPM 包规格，如 @scope/package@version </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="zip" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation> 本地 zip 文件路径 </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="inner" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation> npm/zip 内子目录（相对路径，不能以 / 开头）；npm 默认 dist </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="try-file" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation> 未命中 $uri / $uri/ 时回退的单个文件（doc 根下的文件名，不能含路径分隔符，如 index.html） </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="auto-gzip" type="xs:boolean" use="optional" default="true">
+      <xs:annotation>
+        <xs:documentation> 是否参与 gzip 预压缩；默认 true。false 时该 doc 完全忽略 gzip（不发送已有 .gz 也不生成）。 </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- mavenType (Maven 仓库) -->
+  <xs:complexType name="mavenType">
+    <xs:annotation>
+      <xs:documentation> HTTP 前缀固定为 /maven：正式版与 SNAPSHOT 共用同一入口与同一 &lt;maven base&gt; 目录，按版本区分。不写 &lt;maven&gt; 则不挂载 /maven，但仍有默认仓库（base ${micdn.home}/maven、上游 repo1），&lt;jar&gt; provider 与 install 可用。 </xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="remote">
+        <xs:complexType>
+          <xs:attribute name="url" type="xs:string" use="required" />
+          <xs:attribute name="alias" type="xs:string" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="snapshot" type="snapshotType" maxOccurs="1" />
+    </xs:choice>
+    <xs:attribute name="base" type="xs:string" default="~/maven" use="optional" />
+  </xs:complexType>
+
+  <!-- snapshotType：SNAPSHOT 上游（挂在 /maven 下，与 <maven base> 共用目录）；省略则不代理 SNAPSHOT，只发本地已装入的构件 -->
+  <xs:complexType name="snapshotType">
+    <xs:annotation>
+      <xs:documentation> SNAPSHOT 专用上游：/maven 下路径段以 -SNAPSHOT 结尾的构件本地优先，缺失时按此回源并按 sha1 校验；版本目录的 maven-metadata.xml 还会按 TTL（默认 60 秒）重新探测（正式版路径不会回落到这里）。 </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="remote" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <!-- npmRepoType：根级 NPM 仓库，正式版与开发版共用 base（与 bundle 内的 npm 包引用 npmType 区分） -->
+  <xs:complexType name="npmRepoType">
+    <xs:annotation>
+      <xs:documentation> HTTP 前缀固定为 /npm；&lt;dev&gt; 只配置开发版（dev/预发布）的上游，本地目录同 &lt;npm base&gt;。不写 &lt;npm&gt; 则不挂载 /npm，但仍有默认仓库（base ${micdn.home}/npm、上游 npmmirror），&lt;npm&gt; provider 与 install 可用。 </xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="remote">
+        <xs:complexType>
+          <xs:attribute name="url" type="xs:string" use="required" />
+          <xs:attribute name="alias" type="xs:string" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="dev" type="npmDevType" />
+    </xs:choice>
+    <xs:attribute name="base" type="xs:string" default="~/npm" use="optional" />
+  </xs:complexType>
+
+  <!-- npmDevType：开发版 npm 上游（至多一个）；省略 <dev> 时不代理开发版 -->
+  <xs:complexType name="npmDevType">
+    <xs:annotation>
+      <xs:documentation> 开发版（dev/预发布）专用 registry：dev 版本只从这里回源，不再走 &lt;npm&gt; 的 remote；省略则开发版只认本地。 </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="remote" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <!-- nativeType：native 发行包仓库（GraalVM native-image 的 tar.gz 与 bsdiff 增量补丁），HTTP 前缀固定为 /native -->
+  <xs:complexType name="nativeType">
+    <xs:annotation>
+      <xs:documentation> GraalVM native-image 的发行包（&lt;name&gt;-&lt;version&gt;[-&lt;classifier&gt;].tar.gz）与 bsdiff 增量补丁
+        （&lt;name&gt;-&lt;旧版本&gt;_&lt;版本&gt;[-&lt;时间戳&gt;-&lt;构建号&gt;][-&lt;classifier&gt;].tar.gz.diff）的本地仓库，HTTP 前缀固定为 /native。
+        **单根**：正式版与开发版（版本目录名以 -SNAPSHOT 结尾）共用同一个 base，按 {group 点转斜杠}/{artifact}/{version}/ 归档，
+        与 /maven 同口径；构件没有 pom、也没有 maven-metadata.xml，坐标完全由路径决定，因此这里没有元数据、也没有上游回源
+        （迁移期由上传或运维同步补齐，缺失即 404）。
+        读写：PUT /native/{仓库内相对路径}（全路径 URL，不用 query string；需同时声明 &lt;auth publish-key&gt; 才挂 PUT，
+        且约定先传构件、再传 .sha1，服务端只做原子落盘、不校验先后与配对）；GET|HEAD /native/{仓库内相对路径}，
+        目录（含仓库根 /native）可列出、缺尾斜杠先 302 补 /；文件名里不含时间戳的 -SNAPSHOT 请求解析到同目录时间戳最新的
+        同名文件（HEAD 用 latest 响应头返回实际文件名并给 Last-Modified，GET 302 到该文件），供客户端用别名探测增量补丁；
+        路径含 SNAPSHOT 的响应 no-store，其余 public, max-age=31536000, immutable。
+        不写 &lt;native&gt; 则不挂载 /native（与 &lt;maven&gt; / &lt;npm&gt; 同一套「元素即端点开关」规则），但默认仓库配置仍在
+        （native 没有 provider 与 install 入口，/native 是它唯一的消费者）。客户端 jstart 的默认 --remote 即此端点；
+        上传侧见 beangle/build 的 nativeDistUpload / nativeDeltaUpload。
+        注意：上传体上限取自 &lt;auth max-size&gt;（默认 64M），而发行包常有几十 MB（实测 53–62MB），需要调到 128M 以上。 </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="base" type="xs:string" default="${micdn.home}/native" use="optional">
+      <xs:annotation>
+        <xs:documentation> 本地仓库根：正式版与开发版共用，不再像 sashub 那样按 repository / snapshots 分两个根；发行包几十 MB 起，需要挪到大盘时在这里写 </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="blobType">
+    <xs:annotation>
+      <xs:documentation> 桶名由 path 风格解析：Blob HTTP 挂载在固定 /blob，URI 首段为桶名；S3 兼容挂载在固定 /s3，同样首段为桶名。 </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="bucket" type="blobBucketType" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="base" type="xs:string" default="~/blob" use="optional" />
+    <xs:attribute name="max-size" type="xs:string" default="100M" use="optional" />
+  </xs:complexType>
+
+  <!-- authType：/maven、/npm、/native 三个端点的读写访问控制。publish-key 非空才挂 PUT；download-key 非空才要求读凭据。 -->
+  <xs:complexType name="authType">
+    <xs:annotation>
+      <xs:documentation> 唯一鉴权来源，接管 /maven、/npm、/native 的 GET/HEAD/PUT：
+        publish-key 非空才挂载 PUT（npm publish、mvn deploy、native 发行包与补丁上传），每次上传都必须携带它；
+        download-key 可选，省略或为空表示读不认证（与引入本元素之前一致），非空则「会写出文件体的 GET」必须携带它，
+        而 HEAD 与目录列表（URI 以 / 结尾）不设限（别名/补尾斜杠的 302 在鉴权之后才发出，触发它们的 GET 仍需凭据）——
+        HEAD 是 boot（HttpUtils.isAlive）/jstart（curl -I -L）探测存在性与增量补丁的常规手段，目录列表只暴露「有什么」不交出字节。
+        两个 key 都允许与对方取同值；都为空视为配置错误（防手误导致的「以为受控其实全开」）。
+        凭据与来源地址无关（本机反代下「对端为环回」无法区分远端请求），因此不提供「仅本机」这种退化；
+        只应经 HTTPS（或反代的 HTTPS 终止）暴露。 </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="publish-key" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation> 上传令牌（写权限）：Authorization: Bearer/Basic（Basic 认用户名或口令任一侧等于该值）或 X-Micdn-Token。省略 = 不挂 PUT </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="download-key" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation> 下载令牌（读权限）：省略 = 读不认证；非空则受保护的响应降级为 private 缓存（不得被共享缓存复用） </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="max-size" type="xs:string" default="64M" use="optional">
+      <xs:annotation>
+        <xs:documentation> 单次上传体上限，仅在 publish-key 非空时生效，同时作为未配置 &lt;blob&gt; 时的服务器 maxRequestSize。默认 64M 对 npm 包与 maven 构件足够，但 native 发行包常有几十 MB（实测 53–62MB），需调到 128M 以上 </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- staticType -->
+  <xs:complexType name="staticType">
+    <xs:annotation>
+      <xs:documentation> 静态资源 HTTP 前缀固定为 /static。 </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="bundle" type="bundleType" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="base" type="xs:string" default="~/static" use="optional" />
+  </xs:complexType>
+
+  <!-- wwwType -->
+  <xs:complexType name="wwwType">
+    <xs:sequence>
+      <xs:element name="doc" type="docType" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
