@@ -7,7 +7,9 @@ Beangle Sas Server 是在Apache Tomcat<sup>®</sup>基础上增加了一些简�
 ## 1. 快速安装
 
 ```shell
-wget http://beangle.github.io/scripts/netinstall.sh; chmod +x ./netinstall.sh;./netinstall.sh
+# 先安装 basctl（控制面）与 jstart（构件解析/启动），见各自项目
+basctl init /opt/sas     # 写入 /opt/sas/bin/*.sh，并建 conf/
+cd /opt/sas && ./bin/start.sh all
 ```
 
 ## 2. sas目录结构
@@ -49,67 +51,69 @@ Beangle Sas Server有特别的目录结构:
 
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
-<Sas version="0.10.1">
+<bas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="http://beangle.github.io/schema/bas-1.0.0.xsd"
+     version="0.10.1">
   <!--从这里下载webapp的各类依赖性，如果涉及到没有开源的包，可以改为自己的伺服-->
-  <Repository remote="maven.aliyun.com/nexus/content/groups/public"/>
-  <Hosts>
-    <Host name="web1" ip="192.168.10.1"/>
-    <Host name="web2" ip="192.168.10.2"/>
-  </Hosts>
-  <Engines>
-    <Engine name="tomcat9" type="tomcat" version="9.0.35" jspSupport="true">
-      <Jar uri="gav://com.oracle:ojdbc6:11.2.0.1.0"/>
-    </Engine>
-    <Engine name="tomcat10" type="tomcat" version="10.0.20">
-      <Jar gav="gav://org.postgresql:postgresql:42.2.6"/>
-    </Engine>
-  </Engines>
+  <repository remote="maven.aliyun.com/nexus/content/groups/public"/>
+  <hosts>
+    <host name="web1" ip="192.168.10.1"/>
+    <host name="web2" ip="192.168.10.2"/>
+  </hosts>
+  <engines>
+    <engine name="tomcat9" type="tomcat" version="9.0.35" jsp-support="true">
+      <jar uri="gav://com.oracle:ojdbc6:11.2.0.1.0"/>
+    </engine>
+    <engine name="tomcat10" type="tomcat" version="10.0.20">
+      <jar uri="gav://org.postgresql:postgresql:42.2.6"/>
+    </engine>
+  </engines>
 
-  <Farms>
-    <Farm name="farm1" engine="tomcat9" maxHeapSize="2000">
-      <Http acceptCount="200"  maxThreads="800"/>
-      <ProxyOptions>
+  <farms>
+    <farm name="farm1" engine="tomcat9" max-heap-size="2000">
+      <http accept-count="200"/>
+      <proxy-options>
         balance roundrobin
         http-response set-header X-XSS-Protection 1;\ mode=block
         http-response set-header X-Frame-Options DENY
         http-response set-header X-Content-Type-Options nosniff
-      </ProxyOptions>
-      <Server name="server1"  http="8080" host="web1" />
-    </Farm>
+      </proxy-options>
+      <server name="server1"  http="8080" host="web1" />
+    </farm>
 
-    <Farm name="farm2" engine="tomcat10" maxHeapSize="2000">
-      <Server name="server1" http="8081" host="web2"/>
-    </Farm>
+    <farm name="farm2" engine="tomcat10" max-heap-size="2000">
+      <server name="server1" http="8081" host="web2"/>
+    </farm>
 
-    <Farm name="farm3" engine="tomcat10" hosts="," maxHeapSize="500">
-      <ProxyOptions>
+    <farm name="farm3" engine="tomcat10" max-heap-size="500">
+      <proxy-options>
         balance roundrobin
         cookie SERVERID insert indirect nocache
-      </ProxyOptions>
-      <Server name="server1"  http="9080" host="web1" proxyOptions="check cookie s1"/>
-      <Server name="server2"  http="9081" host="web1" proxyOptions="check cookie s2"/>
-      <Server name="server3"  http="9080" host="web2" proxyOptions="check cookie s3"/>
-      <Server name="server4"  http="9081" host="web2" proxyOptions="check cookie s4"/>
-    </Farm>
-  </Farms>
+      </proxy-options>
+      <server name="server1"  http="9080" host="web1" proxy-options="check cookie s1"/>
+      <server name="server2"  http="9081" host="web1" proxy-options="check cookie s2"/>
+      <server name="server3"  http="9080" host="web2" proxy-options="check cookie s3"/>
+      <server name="server4"  http="9081" host="web2" proxy-options="check cookie s4"/>
+    </farm>
+  </farms>
 
-  <Webapps>
+  <webapps>
     <!--gav 是group-artifact-version的缩写，表示该组件在maven仓库的信息-->
-    <!--maven仓库上没有的war包，可以省去该属性，转而写成docBase="${sas.home}/webapps/app1.war"-->
-    <Webapp name="app1"  uri="gav://org.group:group-app1:0.x.x" runAt="group1" path="/app1" />
-    <Webapp name="app2"  uri="gav://org.group:group-app2:0.x.x" runAt="group1" path="/app2"/>
-    <Webapp name="app3"  uri="gav://org.group:group-app3:0.x.x" runAt="farm2" path="/app3"/>
-    <Webapp name="app4"  uri="gav://org.group:group-app4:0.x.x" runAt="farm2" path="/app4"/>
+    <!--maven仓库上没有的war包，可以省去该属性，转而写成doc-base="${sas.home}/webapps/app1.war"-->
+    <webapp name="app1"  uri="gav://org.group:group-app1:0.x.x" run-at="group1" path="/app1" />
+    <webapp name="app2"  uri="gav://org.group:group-app2:0.x.x" run-at="group1" path="/app2"/>
+    <webapp name="app3"  uri="gav://org.group:group-app3:0.x.x" run-at="farm2" path="/app3"/>
+    <webapp name="app4"  uri="gav://org.group:group-app4:0.x.x" run-at="farm2" path="/app4"/>
 
-    <Webapp name="app_index" uri="gav://org.group:group-app_index:0.x.x"/>
-  </Webapps>
+    <webapp name="app_index" uri="gav://org.group:group-app_index:0.x.x"/>
+  </webapps>
 
   <!--配置代理-->
-  <Proxy engine="haproxy" hostname="your.domain.name">
+  <proxy engine="haproxy" hostname="your.domain.name">
     <!--启用https-->
-    <Https/>
-  </Proxy>
-</Sas>
+    <https/>
+  </proxy>
+</bas>
 ```
 
 ## 3. sas 日常使用
@@ -182,8 +186,8 @@ $ tail -f logs/farm3.server1/console.out
 
 当tomcat有了新版本时，可以通过修改server.xml中的其引擎version属性,之后重启应用直接更新
 ```xml
-<Engine name="tomcat80" type="tomcat" version="9.0.30">
-</Engine>
+<engine name="tomcat80" type="tomcat" version="9.0.30">
+</engine>
 ```
 
 ## 4 更新sas
@@ -193,5 +197,4 @@ $ tail -f logs/farm3.server1/console.out
 ```shell
 $ bin/sas.sh update new_version
 ```
-然后更改conf/server.xml中的`<Sas version="old_version">`节点中的version,将其改为new_version
-
+然后更改conf/server.xml中的`<bas version="old_version">`节点中的version,将其改为new_version
